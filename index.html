@@ -1,868 +1,220 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>你的灵魂属于哪首古诗词</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&family=ZCOOL+XiaoWei&display=swap');
-        *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Noto Serif SC','SimSun',serif;background:#f8f4ed;color:#4a3f35;min-height:100vh;-webkit-font-smoothing:antialiased}
-        .container{max-width:520px;margin:0 auto;padding:0 24px;min-height:100vh}
-        .page{display:none;animation:fadeIn .6s ease}.page.active{display:block}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        .fade-out{animation:fadeOut .35s ease forwards}
-        @keyframes fadeOut{to{opacity:0;transform:translateY(-15px)}}
-        .brand{padding:20px 0;font-size:11px;letter-spacing:4px;color:#b8a88a;border-bottom:1px solid #e8e0d0;display:flex;justify-content:space-between;align-items:center}
-        .brand-right{font-size:10px;letter-spacing:2px;color:#c8b898}
-        .start-page{padding-top:18vh;text-align:center}
-        .start-label{font-size:11px;letter-spacing:6px;color:#b8a88a;margin-bottom:24px}
-        .start-page h1{font-family:'ZCOOL XiaoWei',serif;font-size:2em;color:#3a3028;line-height:1.5;margin-bottom:12px;font-weight:400}
-        .start-meta{font-size:12px;color:#b8a88a;letter-spacing:1px;margin-bottom:48px;line-height:2}
-        .start-desc{font-size:14px;color:#8a7e6e;line-height:2.2;margin-bottom:56px;letter-spacing:.5px}
-        .start-btn{display:inline-block;padding:14px 48px;background:#3a3028;color:#f0e8d8;border:none;font-family:'Noto Serif SC',serif;font-size:14px;letter-spacing:4px;cursor:pointer;transition:all .3s}
-        .start-btn:hover{background:#4a4038}
-        .start-footer{margin-top:48px;font-size:11px;color:#c8b898;letter-spacing:1px}
-        .question-page{padding-top:32px;padding-bottom:40px}
-        .q-progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-        .q-progress-label{font-size:11px;color:#b8a88a;letter-spacing:2px}
-        .q-progress-num{font-size:11px;color:#b8a88a}
-        .q-progress-bar{width:100%;height:1.5px;background:#e0d8c8;margin-bottom:48px}
-        .q-progress-fill{height:100%;background:#8a7a5a;transition:width .5s ease}
-        .q-scene{font-size:12px;color:#b8a88a;letter-spacing:3px;margin-bottom:16px}
-        .q-text{font-size:16px;color:#3a3028;line-height:2;margin-bottom:40px;font-weight:400}
-        .q-options{display:flex;flex-direction:column;gap:12px}
-        .q-opt{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;background:#fff;border:1px solid #e8e0d0;cursor:pointer;transition:all .25s;font-size:14px;line-height:1.8;color:#5a5040}
-        .q-opt:hover{border-color:#c8b898;background:#fdfbf7;transform:translateX(4px)}
-        .q-opt:active{transform:translateX(4px) scale(.995)}
-        .q-opt-label{flex-shrink:0;width:22px;height:22px;border:1px solid #d0c8b8;display:flex;align-items:center;justify-content:center;font-size:10px;color:#a89878;margin-top:2px}
-        .result-page{padding-top:32px;padding-bottom:60px}
-        .r-header{text-align:center;margin-bottom:40px}
-        .r-label{font-size:12px;color:#b8a88a;letter-spacing:4px;margin-bottom:20px}
-        .r-seq{font-size:11px;color:#c8b898;margin-bottom:24px}
-        .r-name{font-family:'ZCOOL XiaoWei',serif;font-size:2.2em;color:#3a3028;margin-bottom:8px;font-weight:400}
-        .r-source{font-size:13px;color:#a89878;letter-spacing:1px;margin-bottom:16px}
-        .r-quote{font-size:14px;color:#7a6e5e;font-style:italic;margin-bottom:24px;line-height:1.8}
-        .r-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-        .r-tag{padding:5px 14px;background:#f0e8d8;font-size:12px;color:#8a7a5a;letter-spacing:1px}
-        .section{margin-bottom:40px}
-        .section-title{display:flex;align-items:center;gap:8px;font-size:14px;color:#3a3028;letter-spacing:2px;margin-bottom:20px;font-weight:500}
-        .section-icon{font-size:14px}
-        .section-body{font-size:14px;color:#5a5040;line-height:2.1;letter-spacing:.3px}
-        .section-body p{margin-bottom:12px;text-indent:2em}
-        .radar-wrap{background:#fff;border:1px solid #e8e0d0;padding:32px 20px 24px;margin-bottom:24px}
-        .radar-chart{width:240px;height:240px;margin:0 auto 28px;position:relative}
-        .radar-chart canvas{width:100%;height:100%}
-        .radar-dims{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-        .radar-dim-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-        .radar-dim-name{font-size:12px;color:#5a5040;letter-spacing:1px}
-        .radar-dim-val{font-size:12px;color:#a89878}
-        .radar-dim-bar{width:100%;height:3px;background:#ece4d4}
-        .radar-dim-fill{height:100%;background:#b8a078;transition:width 1s ease}
-        .radar-dim-desc{font-size:11px;color:#a89878;margin-top:6px;line-height:1.6}
-        .rx-list{padding-left:0;list-style:none}
-        .rx-list li{padding:8px 0;font-size:14px;color:#5a5040;line-height:1.9;display:flex;gap:8px}
-        .rx-num{flex-shrink:0;font-size:12px;color:#a89878;margin-top:3px}
-        .book-item{padding:16px 0;border-bottom:1px solid #ece4d4}
-        .book-item:last-child{border-bottom:none}
-        .book-tag{display:inline-block;padding:2px 10px;background:#f0e8d8;font-size:10px;color:#a89878;letter-spacing:1px;margin-bottom:8px}
-        .book-title{font-size:15px;color:#3a3028;font-weight:500;margin-bottom:4px}
-        .book-author{font-size:12px;color:#a89878;margin-bottom:8px}
-        .book-desc{font-size:13px;color:#7a6e5e;line-height:1.8}
-        .r-actions{display:flex;gap:12px;margin-top:48px}
-        .r-btn{flex:1;padding:14px 0;text-align:center;font-family:'Noto Serif SC',serif;font-size:13px;letter-spacing:2px;cursor:pointer;transition:all .3s;border:1px solid #d0c8b8;background:#fff;color:#5a5040}
-        .r-btn:hover{background:#f8f0e0}
-        .r-btn.primary{background:#3a3028;color:#f0e8d8;border-color:#3a3028}
-        .r-btn.primary:hover{background:#4a4038}
-        .divider{width:40px;height:1px;background:#d8d0c0;margin:0 auto 40px}
-        @media(max-width:420px){.start-page h1{font-size:1.6em}.r-name{font-size:1.8em}.radar-chart{width:200px;height:200px}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你的灵魂属于哪首古诗词</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Serif SC','SimSun',serif;background:#f8f4ed;color:#4a3f35;min-height:100vh;overflow-x:hidden}
+.container{max-width:520px;margin:0 auto;padding:0 24px}
+
+/* 花瓣动画 */
+.petals{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.petal{position:absolute;top:-20px;width:12px;height:12px;background:radial-gradient(ellipse at center,#e8c4a0 0%,#d4a574 50%,transparent 70%);border-radius:50% 0 50% 0;opacity:0.3;animation:fall linear infinite}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg) translateX(0);opacity:0}10%{opacity:0.3}90%{opacity:0.2}100%{transform:translateY(105vh) rotate(720deg) translateX(80px);opacity:0}}
+
+/* 音乐按钮 */
+.music-btn{position:fixed;top:20px;right:20px;z-index:100;width:36px;height:36px;border-radius:50%;border:1px solid #d0c8b8;background:#f8f4ed;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#8a7a5a;transition:all .3s}
+.music-btn:active{transform:scale(0.9)}
+.music-btn.playing{animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(180,160,120,0.3)}50%{box-shadow:0 0 0 8px rgba(180,160,120,0)}}
+
+/* 页面 */
+.page{display:none}.page.active{display:block}
+.brand{padding:20px 0;font-size:11px;letter-spacing:4px;color:#b8a88a;border-bottom:1px solid #e8e0d0;display:flex;justify-content:space-between;position:relative;z-index:1}
+
+/* 开始页 */
+.start-page{padding-top:16vh;text-align:center;position:relative;z-index:1}
+.start-label{font-size:11px;letter-spacing:6px;color:#b8a88a;margin-bottom:24px}
+.start-page h1{font-size:2em;color:#3a3028;line-height:1.5;margin-bottom:12px;font-weight:400}
+.start-meta{font-size:12px;color:#b8a88a;letter-spacing:1px;margin-bottom:40px;line-height:2}
+.start-desc{font-size:14px;color:#8a7e6e;line-height:2.2;margin-bottom:50px}
+.start-btn{padding:14px 48px;background:#3a3028;color:#f0e8d8;border:none;font-size:14px;letter-spacing:4px;cursor:pointer;transition:all .3s}
+.start-btn:active{transform:scale(0.97)}
+.start-footer{margin-top:40px;font-size:11px;color:#c8b898}
+
+/* 题目页 */
+.question-page{padding-top:32px;padding-bottom:40px;position:relative;z-index:1}
+.q-progress{display:flex;justify-content:space-between;margin-bottom:8px}
+.q-progress span{font-size:11px;color:#b8a88a}
+.q-bar{width:100%;height:2px;background:#e0d8c8;margin-bottom:48px}
+.q-fill{height:100%;background:#8a7a5a;transition:width .5s}
+.q-scene{font-size:12px;color:#b8a88a;letter-spacing:3px;margin-bottom:16px}
+.q-text{font-size:16px;color:#3a3028;line-height:2;margin-bottom:40px}
+.q-opts{display:flex;flex-direction:column;gap:12px}
+.q-opt{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;background:#fff;border:1px solid #e8e0d0;cursor:pointer;font-size:14px;line-height:1.8;color:#5a5040;transition:all .25s}
+.q-opt.selected{background:#f0e8d8;border-color:#c8b090;color:#3a3028}
+.q-opt.dimmed{opacity:0.35;pointer-events:none}
+.q-lbl{flex-shrink:0;width:22px;height:22px;border:1px solid #d0c8b8;display:flex;align-items:center;justify-content:center;font-size:10px;color:#a89878;margin-top:2px}
+
+/* 结果页 */
+.result-page{padding-top:32px;padding-bottom:60px;position:relative;z-index:1}
+.r-header{text-align:center;margin-bottom:40px}
+.r-label{font-size:12px;color:#b8a88a;letter-spacing:4px;margin-bottom:20px}
+.r-name{font-size:2em;color:#3a3028;margin-bottom:8px;font-weight:400}
+.r-source{font-size:13px;color:#a89878;margin-bottom:16px}
+.r-quote{font-size:14px;color:#7a6e5e;font-style:italic;margin-bottom:24px;line-height:1.8}
+.r-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.r-tag{padding:5px 14px;background:#f0e8d8;font-size:12px;color:#8a7a5a}
+.section{margin-bottom:36px}
+.section-title{font-size:14px;color:#3a3028;letter-spacing:2px;margin-bottom:16px;font-weight:500}
+.section-body{font-size:14px;color:#5a5040;line-height:2.1}
+.section-body p{margin-bottom:12px;text-indent:2em}
+.radar-wrap{background:#fff;border:1px solid #e8e0d0;padding:28px 20px 20px;margin-bottom:20px}
+.radar-chart{width:220px;height:220px;margin:0 auto 24px}
+.radar-chart canvas{width:100%;height:100%}
+.radar-dims{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dim-hd{display:flex;justify-content:space-between;margin-bottom:4px}
+.dim-nm{font-size:12px;color:#5a5040}
+.dim-vl{font-size:12px;color:#a89878}
+.dim-bar{width:100%;height:3px;background:#ece4d4}
+.dim-fill{height:100%;background:#b8a078}
+.dim-desc{font-size:11px;color:#a89878;margin-top:4px;line-height:1.5}
+.rx-list{list-style:none;padding:0}
+.rx-list li{padding:6px 0;font-size:14px;color:#5a5040;line-height:1.9;display:flex;gap:8px}
+.rx-n{font-size:12px;color:#a89878;margin-top:3px}
+.book{padding:14px 0;border-bottom:1px solid #ece4d4}
+.book:last-child{border-bottom:none}
+.book-tag{display:inline-block;padding:2px 10px;background:#f0e8d8;font-size:10px;color:#a89878;margin-bottom:6px}
+.book-t{font-size:15px;color:#3a3028;font-weight:500;margin-bottom:3px}
+.book-a{font-size:12px;color:#a89878;margin-bottom:6px}
+.book-d{font-size:13px;color:#7a6e5e;line-height:1.8}
+.divider{width:40px;height:1px;background:#d8d0c0;margin:0 auto 36px}
+.r-acts{display:flex;gap:12px;margin-top:48px}
+.r-btn{flex:1;padding:14px 0;text-align:center;font-size:13px;letter-spacing:2px;cursor:pointer;border:1px solid #d0c8b8;background:#fff;color:#5a5040}
+.r-btn.pri{background:#3a3028;color:#f0e8d8;border-color:#3a3028}
+
+/* 分享卡片 */
+.share-card{background:#f8f4ed;border:1px solid #e0d8c8;padding:32px 28px;margin-top:24px;text-align:center;display:none}
+.share-card.show{display:block}
+.sc-label{font-size:10px;color:#b8a88a;letter-spacing:4px;margin-bottom:16px}
+.sc-name{font-size:1.6em;color:#3a3028;margin-bottom:6px}
+.sc-src{font-size:12px;color:#a89878;margin-bottom:14px}
+.sc-poem{font-size:13px;color:#7a6e5e;line-height:2;margin-bottom:16px;font-style:italic}
+.sc-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.sc-tag{padding:3px 10px;background:#f0e8d8;font-size:10px;color:#8a7a5a}
+.sc-dims{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sc-dim{font-size:11px;color:#8a7a5a}
+.sc-footer{font-size:10px;color:#c8b898;letter-spacing:2px;border-top:1px solid #e8e0d0;padding-top:12px}
+.ss-tip{text-align:center;font-size:12px;color:#a89878;margin-top:12px;display:none}
+.ss-tip.show{display:block}
+</style>
 </head>
 <body>
+
+<!-- BGM -->
+<audio id="bgm" loop preload="auto"><source src="bgm.mp3" type="audio/mpeg"></audio>
+
+<!-- 音乐按钮 -->
+<div class="music-btn" id="musicBtn" onclick="toggleMusic()">🔇</div>
+
+<!-- 花瓣 -->
+<div class="petals" id="petals"></div>
+
 <div class="container">
-    <div class="brand"><span>LITERA</span><span class="brand-right"></span></div>
-    <div class="page active" id="startPage">
-        <div class="start-page">
-            <div class="start-label">你的文学灵魂测试</div>
-            <h1>你的灵魂<br>属于哪首古诗词</h1>
-            <div class="start-meta">二十问 · 五十词 · 六维度</div>
-            <div class="start-desc">每个人的心底都藏着一首诗<br>它在你欢喜时低吟，落寞时浅唱<br>二十道心灵之问<br>带你找到那首属于你的千古回响</div>
-            <button class="start-btn" onclick="startQuiz()">开始测试</button>
-            <div class="start-footer">约需 3-5 分钟 · 请跟随直觉作答</div>
-        </div>
-    </div>
-    <div class="page" id="questionPage">
-        <div class="question-page">
-            <div class="q-progress"><span class="q-progress-label">测试进行中</span><span class="q-progress-num" id="qNum"></span></div>
-            <div class="q-progress-bar"><div class="q-progress-fill" id="qFill"></div></div>
-            <div class="q-scene" id="qScene"></div>
-            <div class="q-text" id="qText"></div>
-            <div class="q-options" id="qOpts"></div>
-        </div>
-    </div>
-    <div class="page" id="resultPage">
-        <div class="result-page" id="resultContent"></div>
-    </div>
+<div class="brand"><span>LITERA</span><span></span></div>
+
+<div class="page active" id="pg0"><div class="start-page">
+<div class="start-label">你的文学灵魂测试</div>
+<h1>你的灵魂<br>属于哪首古诗词</h1>
+<div class="start-meta">二十问 · 五十词 · 六维度</div>
+<div class="start-desc">每个人的心底都藏着一首诗<br>它在你欢喜时低吟，落寞时浅唱<br>二十道心灵之问<br>带你找到那首属于你的千古回响</div>
+<button class="start-btn" onclick="go()">开始测试</button>
+<div class="start-footer">约需 3-5 分钟 · 请跟随直觉作答</div>
+</div></div>
+
+<div class="page" id="pg1"><div class="question-page">
+<div class="q-progress"><span>测试进行中</span><span id="qN"></span></div>
+<div class="q-bar"><div class="q-fill" id="qF"></div></div>
+<div class="q-scene" id="qS"></div>
+<div class="q-text" id="qT"></div>
+<div class="q-opts" id="qO"></div>
+</div></div>
+
+<div class="page" id="pg2"><div class="result-page" id="rC"></div></div>
 </div>
 
+<!-- 外部数据文件 -->
+<script src="data.js"></script>
+
 <script>
-// ============================================================
-// 六维度: W入世感 P燃烧度 S抗争度 C清醒力 A漫游度 E局外感
-// ============================================================
-const questions=[
-{scene:"壹 · 关于清晨",text:"闹钟响了，你从梦中醒来。窗帘缝隙里漏进一线光。你睁开眼的第一个念头是——",options:[
-{text:"今天有很多事要做，赶紧起来，别浪费时间",scores:{W:2,P:0,S:1,C:2,A:-1,E:-1}},
-{text:"再躺五分钟吧……刚才那个梦还没做完",scores:{W:-1,P:1,S:-1,C:-1,A:1,E:0}},
-{text:"那道光真好看，像是有人在窗外悄悄放了一把金子",scores:{W:-1,P:0,S:0,C:-1,A:0,E:1}},
-{text:"又是新的一天。不知道今天会遇见什么人，发生什么事",scores:{W:0,P:1,S:0,C:0,A:1,E:0}}
-]},
-{scene:"贰 · 关于孤独",text:"深夜独坐，窗外起了风，万籁俱寂之中你忽然听见自己心跳的声音。此刻你想——",options:[
-{text:"推窗而出，趁着月色去走一走，天地便是最好的酒友",scores:{W:0,P:1,S:1,C:0,A:2,E:0}},
-{text:"点一盏灯，铺开纸墨，把这份安静酿成文字",scores:{W:-1,P:0,S:0,C:1,A:0,E:1}},
-{text:"想起一个人，那些旧事像月光一样铺满了整个房间",scores:{W:0,P:2,S:-1,C:-1,A:0,E:0}},
-{text:"什么也不做，就这样静静坐着，与黑暗和解",scores:{W:-2,P:-1,S:0,C:1,A:0,E:2}}
-]},
-{scene:"叁 · 关于远方",text:"如果给你一次穿越的机会，你会选择去往——",options:[
-{text:"盛唐长安，万国来朝，在最繁华的街头纵马高歌",scores:{W:2,P:2,S:1,C:0,A:2,E:-1}},
-{text:"魏晋山林，与竹林七贤对饮，醉后抚琴一曲",scores:{W:-2,P:1,S:-1,C:0,A:1,E:2}},
-{text:"南宋江南，在烟雨中撑一把油纸伞，走过断桥",scores:{W:0,P:2,S:-1,C:-1,A:0,E:0}},
-{text:"先秦旷野，天地洪荒，做一个最原始的自由人",scores:{W:-1,P:0,S:1,C:0,A:2,E:1}}
-]},
-{scene:"肆 · 关于离别",text:"送别一位挚友远行，你最可能的反应是——",options:[
-{text:"\"去吧！天大地大，咱们后会有期，这杯酒干了！\"",scores:{W:1,P:1,S:2,C:0,A:1,E:0}},
-{text:"\"你走以后，这座城里我大概会少去很多地方。\"",scores:{W:0,P:2,S:-2,C:0,A:-1,E:0}},
-{text:"什么都说不出口，只是用力握了握对方的手",scores:{W:0,P:1,S:0,C:0,A:0,E:1}},
-{text:"\"聚散皆是缘，你我山水之间，各自珍重便好。\"",scores:{W:-1,P:-1,S:0,C:2,A:0,E:1}}
-]},
-{scene:"伍 · 关于春天",text:"春日午后，你推开门，发现院中的花一夜之间全开了。你的第一反应——",options:[
-{text:"赶紧叫上三五好友来赏花饮酒，好春光不可辜负",scores:{W:2,P:1,S:0,C:0,A:1,E:-1}},
-{text:"心头一颤——这么美的东西，很快就要凋零了",scores:{W:0,P:2,S:-1,C:-1,A:0,E:0}},
-{text:"搬一把椅子坐在花下，什么也不想，就这么待着",scores:{W:-1,P:0,S:0,C:0,A:0,E:2}},
-{text:"仔细端详每一朵花的姿态，在心中默默为它们取名",scores:{W:0,P:0,S:0,C:1,A:0,E:1}}
-]},
-{scene:"陆 · 关于挫折",text:"人生遭遇了一次重大的失意——落榜、失业、分手。你会如何自处？",options:[
-{text:"大醉一场，醒来拍拍灰，天生我材必有用",scores:{W:1,P:1,S:2,C:0,A:1,E:0}},
-{text:"找一个没人认识我的地方，从头开始",scores:{W:0,P:0,S:1,C:1,A:2,E:0}},
-{text:"反复回想哪里出了错，夜里翻来覆去睡不着",scores:{W:0,P:2,S:-2,C:-1,A:0,E:0}},
-{text:"去山里住一阵，听听溪水鸟鸣，等心自己慢慢静下来",scores:{W:-2,P:-1,S:0,C:0,A:0,E:2}}
-]},
-{scene:"柒 · 关于月亮",text:"中秋之夜，你抬头望月。月亮在你眼中是——",options:[
-{text:"一壶酒的引子，举杯邀月，对影成三人",scores:{W:0,P:1,S:0,C:0,A:2,E:1}},
-{text:"远方某个人也在看的同一轮月，此刻心意相通",scores:{W:1,P:2,S:0,C:-1,A:0,E:0}},
-{text:"亘古不变的旁观者，它看过太多人间的悲欢离合",scores:{W:0,P:0,S:0,C:2,A:0,E:2}},
-{text:"清辉如水，洒在身上像一件薄薄的衣裳",scores:{W:-1,P:0,S:-1,C:0,A:0,E:1}}
-]},
-{scene:"捌 · 关于爱情",text:"你理想中的爱情，更接近哪一种？",options:[
-{text:"烈酒般轰轰烈烈，哪怕飞蛾扑火也在所不惜",scores:{W:1,P:2,S:1,C:-2,A:0,E:-1}},
-{text:"细水长流，柴米油盐里的温柔，平淡即是真",scores:{W:2,P:0,S:0,C:1,A:-1,E:0}},
-{text:"可遇不可求，最好的爱是彼此成全后的转身",scores:{W:0,P:1,S:0,C:1,A:0,E:1}},
-{text:"灵魂共振，不必朝夕相对，心中有你便是永恒",scores:{W:-1,P:1,S:0,C:0,A:1,E:1}}
-]},
-{scene:"玖 · 关于雨天",text:"走在路上突然下起了雨，你没有带伞。你会——",options:[
-{text:"索性淋着走，甚至张开双臂，享受这突如其来的痛快",scores:{W:0,P:1,S:2,C:-1,A:2,E:0}},
-{text:"跑到最近的屋檐下，看雨丝织成一幅水墨画",scores:{W:0,P:0,S:0,C:0,A:0,E:2}},
-{text:"听着雨声，莫名想起很多往事，眼眶有些湿润",scores:{W:0,P:2,S:-2,C:-1,A:0,E:0}},
-{text:"不疾不徐地继续走，雨也好晴也好，都是寻常",scores:{W:0,P:-1,S:1,C:2,A:0,E:1}}
-]},
-{scene:"拾 · 关于理想",text:"如果人生只能追求一样东西，你选——",options:[
-{text:"功业。大丈夫当立不世之功，名垂青史",scores:{W:2,P:1,S:2,C:1,A:0,E:-2}},
-{text:"自由。不为五斗米折腰，天地任我逍遥",scores:{W:-2,P:0,S:1,C:0,A:2,E:1}},
-{text:"至情。得一人心，白首不离，此生足矣",scores:{W:1,P:2,S:0,C:-1,A:-1,E:0}},
-{text:"宁静。内心的安定，比什么都珍贵",scores:{W:-1,P:-2,S:0,C:1,A:0,E:2}}
-]},
-{scene:"拾壹 · 关于饮酒",text:"若以酒喻你的性情，你觉得自己更像——",options:[
-{text:"烈酒。入喉如火，一饮而尽才够痛快",scores:{W:1,P:2,S:2,C:-1,A:1,E:0}},
-{text:"黄酒。温热绵长，后劲悠远，越品越有味",scores:{W:1,P:0,S:0,C:1,A:0,E:0}},
-{text:"花酿。清甜微醺，带着春天的气息",scores:{W:0,P:1,S:-2,C:0,A:0,E:0}},
-{text:"清茶。不算酒，但我更爱这份清醒的自持",scores:{W:-1,P:-2,S:0,C:2,A:0,E:1}}
-]},
-{scene:"拾贰 · 关于故乡",text:"离家多年，最让你魂牵梦萦的是——",options:[
-{text:"一条老巷子，青石板路上有我跑过的痕迹",scores:{W:0,P:1,S:0,C:0,A:0,E:1}},
-{text:"母亲灶台上的烟火气，那个味道再也复刻不了",scores:{W:2,P:2,S:-1,C:0,A:-1,E:0}},
-{text:"少年时仰望过的那片星空，干净得不像话",scores:{W:-1,P:0,S:0,C:0,A:1,E:2}},
-{text:"其实我不太回头看，前方永远比故乡更吸引我",scores:{W:0,P:-1,S:2,C:1,A:2,E:0}}
-]},
-{scene:"拾叁 · 关于生死",text:"一个沉重却绕不开的问题——你如何看待生命的终点？",options:[
-{text:"死当马革裹尸还，活着就要活得轰轰烈烈",scores:{W:2,P:2,S:2,C:0,A:0,E:-1}},
-{text:"\"人生如逆旅，我亦是行人\"——坦然接受便好",scores:{W:0,P:-1,S:1,C:2,A:0,E:1}},
-{text:"最怕的不是死，是遗忘。怕爱过的人忘了我",scores:{W:1,P:2,S:-1,C:-1,A:0,E:0}},
-{text:"\"死去何所道，托体同山阿\"——回归天地，未尝不是归处",scores:{W:-2,P:-1,S:0,C:1,A:0,E:2}}
-]},
-{scene:"拾肆 · 关于争执",text:"你和一个重要的人发生了激烈的争吵，事后你会——",options:[
-{text:"冷静下来分析谁对谁错，该道歉就道歉，就事论事",scores:{W:1,P:0,S:1,C:2,A:0,E:0}},
-{text:"虽然知道自己有道理，但还是先低头，不想失去这段关系",scores:{W:1,P:1,S:-2,C:0,A:0,E:0}},
-{text:"一个人待着消化情绪，等气消了再说，但心里的结可能很久都解不开",scores:{W:0,P:1,S:0,C:0,A:0,E:2}},
-{text:"说了就说了，过去就过去，不喜欢翻旧账",scores:{W:0,P:-1,S:1,C:0,A:1,E:0}}
-]},
-{scene:"拾伍 · 关于音乐",text:"深夜一个人戴着耳机，你最想听到的声音是——",options:[
-{text:"大提琴或古琴，低沉悠远，像大地在呼吸",scores:{W:0,P:0,S:0,C:1,A:0,E:2}},
-{text:"一首能让你哭出来的歌，有时候眼泪是最好的解药",scores:{W:0,P:2,S:-1,C:-1,A:0,E:0}},
-{text:"节奏强烈的摇滚或说唱，感觉血液都在燃烧",scores:{W:1,P:1,S:2,C:-1,A:1,E:-1}},
-{text:"雨声、风声、虫鸣……自然的白噪音就够了",scores:{W:-2,P:-1,S:0,C:0,A:0,E:2}}
-]},
-{scene:"拾陆 · 关于选择",text:"面前有两条路：一条安稳但平庸，一条精彩但充满风险。你——",options:[
-{text:"毫不犹豫选风险那条，人生就该轰轰烈烈",scores:{W:0,P:1,S:2,C:-1,A:2,E:0}},
-{text:"理性评估后再决定，冲动是魔鬼",scores:{W:1,P:0,S:0,C:2,A:0,E:0}},
-{text:"选安稳的，但心里会一直惦记另一条路",scores:{W:1,P:1,S:-1,C:0,A:0,E:0}},
-{text:"能不能不选？我想在路边坐一会儿",scores:{W:-1,P:0,S:-1,C:0,A:0,E:2}}
-]},
-{scene:"拾柒 · 关于陌生人",text:"在旅途中，一个陌生人向你讲述了自己的故事。你——",options:[
-{text:"认真听完，甚至眼眶湿润，替对方的遭遇感到难过",scores:{W:2,P:2,S:0,C:-1,A:0,E:-1}},
-{text:"听着听着，开始想到自己类似的经历",scores:{W:0,P:1,S:0,C:0,A:0,E:0}},
-{text:"觉得有趣，每个人都是一本书，世界真奇妙",scores:{W:0,P:0,S:0,C:1,A:2,E:1}},
-{text:"礼貌地听着，但内心保持距离，不太想介入别人的人生",scores:{W:-1,P:-1,S:0,C:1,A:0,E:2}}
-]},
-{scene:"拾捌 · 关于深夜",text:"凌晨三点，整个城市都睡着了，只有你还醒着。这个时刻对你来说是——",options:[
-{text:"最好的工作时间，安静高效，灵感都在这时候来",scores:{W:1,P:0,S:1,C:1,A:0,E:1}},
-{text:"最脆弱的时刻，白天藏好的情绪全跑出来了",scores:{W:0,P:2,S:-2,C:-1,A:0,E:0}},
-{text:"最自由的时刻，不用扮演任何角色，终于可以做自己",scores:{W:-1,P:0,S:0,C:0,A:2,E:1}},
-{text:"有点荒凉，但这种荒凉让人上瘾",scores:{W:-1,P:0,S:0,C:0,A:0,E:2}}
-]},
-{scene:"拾玖 · 关于遗憾",text:"回望过去，最让你耿耿于怀的遗憾类型是——",options:[
-{text:"没有勇敢去做的事——那些\"差一点就\"的冒险",scores:{W:0,P:1,S:1,C:0,A:2,E:0}},
-{text:"没有好好珍惜的人——那些来不及说的话",scores:{W:1,P:2,S:-1,C:0,A:0,E:0}},
-{text:"没有坚持到底的理想——向现实妥协的那些瞬间",scores:{W:1,P:1,S:2,C:0,A:0,E:-1}},
-{text:"说不上来，就是一种模糊的怅惘，像雾一样散不开",scores:{W:0,P:1,S:0,C:-1,A:0,E:2}}
-]},
-{scene:"贰拾 · 关于归宿",text:"如果可以选择，你希望生命最后的画面是——",options:[
-{text:"在一件伟大的事业中燃尽，像流星划过夜空",scores:{W:2,P:2,S:2,C:0,A:0,E:-1}},
-{text:"爱人握着你的手，窗外有阳光，岁月静好",scores:{W:2,P:1,S:0,C:0,A:-1,E:0}},
-{text:"一个人在山间小屋，炉火将熄，雪落无声",scores:{W:-2,P:-1,S:0,C:1,A:0,E:2}},
-{text:"在路上——哪怕走不动了，脸也朝着远方",scores:{W:0,P:0,S:1,C:0,A:2,E:1}}
-]}
-];
+// 题目数据
+var Q=[{s:"壹 · 关于清晨",t:"闹钟响了，你从梦中醒来。窗帘缝隙里漏进一线光。你睁开眼的第一个念头是——",o:[{t:"今天有很多事要做，赶紧起来，别浪费时间",v:{W:2,P:0,S:1,C:2,A:-1,E:-1}},{t:"再躺五分钟吧……刚才那个梦还没做完",v:{W:-1,P:1,S:-1,C:-1,A:1,E:0}},{t:"那道光真好看，像是有人在窗外悄悄放了一把金子",v:{W:-1,P:0,S:0,C:-1,A:0,E:1}},{t:"又是新的一天。不知道今天会遇见什么人，发生什么事",v:{W:0,P:1,S:0,C:0,A:1,E:0}}]},{s:"贰 · 关于孤独",t:"深夜独坐，窗外起了风，万籁俱寂之中你忽然听见自己心跳的声音。此刻你想——",o:[{t:"推窗而出，趁着月色去走一走，天地便是最好的酒友",v:{W:0,P:1,S:1,C:0,A:2,E:0}},{t:"点一盏灯，铺开纸墨，把这份安静酿成文字",v:{W:-1,P:0,S:0,C:1,A:0,E:1}},{t:"想起一个人，那些旧事像月光一样铺满了整个房间",v:{W:0,P:2,S:-1,C:-1,A:0,E:0}},{t:"什么也不做，就这样静静坐着，与黑暗和解",v:{W:-2,P:-1,S:0,C:1,A:0,E:2}}]},{s:"叁 · 关于远方",t:"如果给你一次穿越的机会，你会选择去往——",o:[{t:"盛唐长安，万国来朝，在最繁华的街头纵马高歌",v:{W:2,P:2,S:1,C:0,A:2,E:-1}},{t:"魏晋山林，与竹林七贤对饮，醉后抚琴一曲",v:{W:-2,P:1,S:-1,C:0,A:1,E:2}},{t:"南宋江南，在烟雨中撑一把油纸伞，走过断桥",v:{W:0,P:2,S:-1,C:-1,A:0,E:0}},{t:"先秦旷野，天地洪荒，做一个最原始的自由人",v:{W:-1,P:0,S:1,C:0,A:2,E:1}}]},{s:"肆 · 关于离别",t:"送别一位挚友远行，你最可能的反应是——",o:[{t:"\"去吧！天大地大，咱们后会有期，这杯酒干了！\"",v:{W:1,P:1,S:2,C:0,A:1,E:0}},{t:"\"你走以后，这座城里我大概会少去很多地方。\"",v:{W:0,P:2,S:-2,C:0,A:-1,E:0}},{t:"什么都说不出口，只是用力握了握对方的手",v:{W:0,P:1,S:0,C:0,A:0,E:1}},{t:"\"聚散皆是缘，你我山水之间，各自珍重便好。\"",v:{W:-1,P:-1,S:0,C:2,A:0,E:1}}]},{s:"伍 · 关于春天",t:"春日午后，你推开门，发现院中的花一夜之间全开了。你的第一反应——",o:[{t:"赶紧叫上三五好友来赏花饮酒，好春光不可辜负",v:{W:2,P:1,S:0,C:0,A:1,E:-1}},{t:"心头一颤——这么美的东西，很快就要凋零了",v:{W:0,P:2,S:-1,C:-1,A:0,E:0}},{t:"搬一把椅子坐在花下，什么也不想，就这么待着",v:{W:-1,P:0,S:0,C:0,A:0,E:2}},{t:"仔细端详每一朵花的姿态，在心中默默为它们取名",v:{W:0,P:0,S:0,C:1,A:0,E:1}}]},{s:"陆 · 关于挫折",t:"人生遭遇了一次重大的失意——落榜、失业、分手。你会如何自处？",o:[{t:"大醉一场，醒来拍拍灰，天生我材必有用",v:{W:1,P:1,S:2,C:0,A:1,E:0}},{t:"找一个没人认识我的地方，从头开始",v:{W:0,P:0,S:1,C:1,A:2,E:0}},{t:"反复回想哪里出了错，夜里翻来覆去睡不着",v:{W:0,P:2,S:-2,C:-1,A:0,E:0}},{t:"去山里住一阵，听听溪水鸟鸣，等心自己慢慢静下来",v:{W:-2,P:-1,S:0,C:0,A:0,E:2}}]},{s:"柒 · 关于月亮",t:"中秋之夜，你抬头望月。月亮在你眼中是——",o:[{t:"一壶酒的引子，举杯邀月，对影成三人",v:{W:0,P:1,S:0,C:0,A:2,E:1}},{t:"远方某个人也在看的同一轮月，此刻心意相通",v:{W:1,P:2,S:0,C:-1,A:0,E:0}},{t:"亘古不变的旁观者，它看过太多人间的悲欢离合",v:{W:0,P:0,S:0,C:2,A:0,E:2}},{t:"清辉如水，洒在身上像一件薄薄的衣裳",v:{W:-1,P:0,S:-1,C:0,A:0,E:1}}]},{s:"捌 · 关于爱情",t:"你理想中的爱情，更接近哪一种？",o:[{t:"烈酒般轰轰烈烈，哪怕飞蛾扑火也在所不惜",v:{W:1,P:2,S:1,C:-2,A:0,E:-1}},{t:"细水长流，柴米油盐里的温柔，平淡即是真",v:{W:2,P:0,S:0,C:1,A:-1,E:0}},{t:"可遇不可求，最好的爱是彼此成全后的转身",v:{W:0,P:1,S:0,C:1,A:0,E:1}},{t:"灵魂共振，不必朝夕相对，心中有你便是永恒",v:{W:-1,P:1,S:0,C:0,A:1,E:1}}]},{s:"玖 · 关于雨天",t:"走在路上突然下起了雨，你没有带伞。你会——",o:[{t:"索性淋着走，甚至张开双臂，享受这突如其来的痛快",v:{W:0,P:1,S:2,C:-1,A:2,E:0}},{t:"跑到最近的屋檐下，看雨丝织成一幅水墨画",v:{W:0,P:0,S:0,C:0,A:0,E:2}},{t:"听着雨声，莫名想起很多往事，眼眶有些湿润",v:{W:0,P:2,S:-2,C:-1,A:0,E:0}},{t:"不疾不徐地继续走，雨也好晴也好，都是寻常",v:{W:0,P:-1,S:1,C:2,A:0,E:1}}]},{s:"拾 · 关于理想",t:"如果人生只能追求一样东西，你选——",o:[{t:"功业。大丈夫当立不世之功，名垂青史",v:{W:2,P:1,S:2,C:1,A:0,E:-2}},{t:"自由。不为五斗米折腰，天地任我逍遥",v:{W:-2,P:0,S:1,C:0,A:2,E:1}},{t:"至情。得一人心，白首不离，此生足矣",v:{W:1,P:2,S:0,C:-1,A:-1,E:0}},{t:"宁静。内心的安定，比什么都珍贵",v:{W:-1,P:-2,S:0,C:1,A:0,E:2}}]},{s:"拾壹 · 关于饮酒",t:"若以酒喻你的性情，你觉得自己更像——",o:[{t:"烈酒。入喉如火，一饮而尽才够痛快",v:{W:1,P:2,S:2,C:-1,A:1,E:0}},{t:"黄酒。温热绵长，后劲悠远，越品越有味",v:{W:1,P:0,S:0,C:1,A:0,E:0}},{t:"花酿。清甜微醺，带着春天的气息",v:{W:0,P:1,S:-2,C:0,A:0,E:0}},{t:"清茶。不算酒，但我更爱这份清醒的自持",v:{W:-1,P:-2,S:0,C:2,A:0,E:1}}]},{s:"拾贰 · 关于故乡",t:"离家多年，最让你魂牵梦萦的是——",o:[{t:"一条老巷子，青石板路上有我跑过的痕迹",v:{W:0,P:1,S:0,C:0,A:0,E:1}},{t:"母亲灶台上的烟火气，那个味道再也复刻不了",v:{W:2,P:2,S:-1,C:0,A:-1,E:0}},{t:"少年时仰望过的那片星空，干净得不像话",v:{W:-1,P:0,S:0,C:0,A:1,E:2}},{t:"其实我不太回头看，前方永远比故乡更吸引我",v:{W:0,P:-1,S:2,C:1,A:2,E:0}}]},{s:"拾叁 · 关于生死",t:"一个沉重却绕不开的问题——你如何看待生命的终点？",o:[{t:"死当马革裹尸还，活着就要活得轰轰烈烈",v:{W:2,P:2,S:2,C:0,A:0,E:-1}},{t:"\"人生如逆旅，我亦是行人\"——坦然接受便好",v:{W:0,P:-1,S:1,C:2,A:0,E:1}},{t:"最怕的不是死，是遗忘。怕爱过的人忘了我",v:{W:1,P:2,S:-1,C:-1,A:0,E:0}},{t:"\"死去何所道，托体同山阿\"——回归天地，未尝不是归处",v:{W:-2,P:-1,S:0,C:1,A:0,E:2}}]},{s:"拾肆 · 关于争执",t:"你和一个重要的人发生了激烈的争吵，事后你会——",o:[{t:"冷静下来分析谁对谁错，该道歉就道歉，就事论事",v:{W:1,P:0,S:1,C:2,A:0,E:0}},{t:"虽然知道自己有道理，但还是先低头，不想失去这段关系",v:{W:1,P:1,S:-2,C:0,A:0,E:0}},{t:"一个人待着消化情绪，等气消了再说，但心里的结可能很久都解不开",v:{W:0,P:1,S:0,C:0,A:0,E:2}},{t:"说了就说了，过去就过去，不喜欢翻旧账",v:{W:0,P:-1,S:1,C:0,A:1,E:0}}]},{s:"拾伍 · 关于音乐",t:"深夜一个人戴着耳机，你最想听到的声音是——",o:[{t:"大提琴或古琴，低沉悠远，像大地在呼吸",v:{W:0,P:0,S:0,C:1,A:0,E:2}},{t:"一首能让你哭出来的歌，有时候眼泪是最好的解药",v:{W:0,P:2,S:-1,C:-1,A:0,E:0}},{t:"节奏强烈的摇滚或说唱，感觉血液都在燃烧",v:{W:1,P:1,S:2,C:-1,A:1,E:-1}},{t:"雨声、风声、虫鸣……自然的白噪音就够了",v:{W:-2,P:-1,S:0,C:0,A:0,E:2}}]},{s:"拾陆 · 关于选择",t:"面前有两条路：一条安稳但平庸，一条精彩但充满风险。你——",o:[{t:"毫不犹豫选风险那条，人生就该轰轰烈烈",v:{W:0,P:1,S:2,C:-1,A:2,E:0}},{t:"理性评估后再决定，冲动是魔鬼",v:{W:1,P:0,S:0,C:2,A:0,E:0}},{t:"选安稳的，但心里会一直惦记另一条路",v:{W:1,P:1,S:-1,C:0,A:0,E:0}},{t:"能不能不选？我想在路边坐一会儿",v:{W:-1,P:0,S:-1,C:0,A:0,E:2}}]},{s:"拾柒 · 关于陌生人",t:"在旅途中，一个陌生人向你讲述了自己的故事。你——",o:[{t:"认真听完，甚至眼眶湿润，替对方的遭遇感到难过",v:{W:2,P:2,S:0,C:-1,A:0,E:-1}},{t:"听着听着，开始想到自己类似的经历",v:{W:0,P:1,S:0,C:0,A:0,E:0}},{t:"觉得有趣，每个人都是一本书，世界真奇妙",v:{W:0,P:0,S:0,C:1,A:2,E:1}},{t:"礼貌地听着，但内心保持距离，不太想介入别人的人生",v:{W:-1,P:-1,S:0,C:1,A:0,E:2}}]},{s:"拾捌 · 关于深夜",t:"凌晨三点，整个城市都睡着了，只有你还醒着。这个时刻对你来说是——",o:[{t:"最好的工作时间，安静高效，灵感都在这时候来",v:{W:1,P:0,S:1,C:1,A:0,E:1}},{t:"最脆弱的时刻，白天藏好的情绪全跑出来了",v:{W:0,P:2,S:-2,C:-1,A:0,E:0}},{t:"最自由的时刻，不用扮演任何角色，终于可以做自己",v:{W:-1,P:0,S:0,C:0,A:2,E:1}},{t:"有点荒凉，但这种荒凉让人上瘾",v:{W:-1,P:0,S:0,C:0,A:0,E:2}}]},{s:"拾玖 · 关于遗憾",t:"回望过去，最让你耿耿于怀的遗憾类型是——",o:[{t:"没有勇敢去做的事——那些\"差一点就\"的冒险",v:{W:0,P:1,S:1,C:0,A:2,E:0}},{t:"没有好好珍惜的人——那些来不及说的话",v:{W:1,P:2,S:-1,C:0,A:0,E:0}},{t:"没有坚持到底的理想——向现实妥协的那些瞬间",v:{W:1,P:1,S:2,C:0,A:0,E:-1}},{t:"说不上来，就是一种模糊的怅惘，像雾一样散不开",v:{W:0,P:1,S:0,C:-1,A:0,E:2}}]},{s:"贰拾 · 关于归宿",t:"如果可以选择，你希望生命最后的画面是——",o:[{t:"在一件伟大的事业中燃尽，像流星划过夜空",v:{W:2,P:2,S:2,C:0,A:0,E:-1}},{t:"爱人握着你的手，窗外有阳光，岁月静好",v:{W:2,P:1,S:0,C:0,A:-1,E:0}},{t:"一个人在山间小屋，炉火将熄，雪落无声",v:{W:-2,P:-1,S:0,C:1,A:0,E:2}},{t:"在路上——哪怕走不动了，脸也朝着远方",v:{W:0,P:0,S:1,C:0,A:2,E:1}}]}];
 
-// ============================================================
-// 50个结果
-// ============================================================
-const results=[
-{name:"李白",source:"《将进酒》",quote:"\"天生我材必有用，千金散尽还复来。\"",tags:["豪放不羁","天真赤诚","浪漫至极"],center:{W:2,P:6,S:8,C:-4,A:10,E:0},
-sketch:`<p>你的灵魂里住着一团火。那是少年意气，是仗剑天涯的梦，是哪怕全世界都说不行你也要试一试的倔强。</p><p>你天生不是被规则驯服的人。你渴望辽阔、渴望痛快、渴望在最高的山顶大喊一声。你的热情是真的，快乐是真的，偶尔的落寞也是真的——但你永远不会在低谷停留太久。</p>`,
-modern:`<p>你常常是朋友圈里最先发起聚会的人，也是最先说走就走的人。你的行动力惊人，但有时缺乏持久的耐心。你讨厌一成不变，讨厌被框在格子间里数日子。</p>`,
-armor:`<p>你有一种天然的感染力。当你兴致高昂的时候，整个房间都会被你点亮。你的乐观不是装出来的，而是骨子里就相信——天塌下来也没什么大不了。</p>`,
-soft:`<p>你太容易被新鲜事物吸引，以至于很多事情都是"开头惊艳，中间失踪，结尾缺席"。你也害怕被拒绝，所以常常用狂放来掩饰脆弱。</p>`,
-rx:["试着把一件事坚持做满100天，你会发现持久的力量比爆发力更迷人。","允许自己偶尔安静下来，不必时刻做人群中最亮的那个。","找一个能让你慢下来的人或事，那是你的锚。"],
-books:[{tag:"灵魂共振",title:"《在路上》",author:"杰克·凯鲁亚克",desc:"你会在迪安身上看到自己——那种对自由近乎疯狂的渴望。"},{tag:"精神镇定",title:"《瓦尔登湖》",author:"亨利·梭罗",desc:"当你跑累了的时候，这本书会教你停下来的艺术。"},{tag:"灵魂对话",title:"《月亮与六便士》",author:"毛姆",desc:"关于一个人如何放弃一切去追逐内心的火焰。"}]},
+// 花瓣动画
+function createPetals(){var c=document.getElementById('petals');for(var i=0;i<15;i++){var p=document.createElement('div');p.className='petal';p.style.left=Math.random()*100+'%';p.style.animationDuration=(Math.random()*8+8)+'s';p.style.animationDelay=(Math.random()*6)+'s';p.style.width=(Math.random()*8+8)+'px';p.style.height=p.style.width;p.style.opacity=Math.random()*0.2+0.1;c.appendChild(p);}}
+createPetals();
 
-{name:"李清照",source:"《如梦令》",quote:"\"知否，知否，应是绿肥红瘦。\"",tags:["细腻敏感","才情万种","柔中带刚"],center:{W:2,P:10,S:-6,C:-2,A:-2,E:2},
-sketch:`<p>你拥有一颗极其细腻的心。别人看到花开，你看到的是花将谢未谢时那一瞬的颤抖；别人听到雨声，你听到的是雨滴落在不同叶片上微妙的音差。</p><p>你的感受力是一种天赋，也是一种甜蜜的负担。你比大多数人更容易被美打动，也更容易被离别刺痛。</p>`,
-modern:`<p>你常常是群体里最安静的，却最早感受到氛围变化的人。社交不会少，但真正重要的感受你很难轻易说出去。你不需要被理解，你需要的是被看见。</p>`,
-armor:`<p>你有非常强的情绪分辨率，能比大多数人更早察觉关系里的细小裂纹，也更容易体会真正珍贵的感受。</p>`,
-soft:`<p>你太容易把一点点不对劲放大成整片废墟。你对失真和冷淡的感知太灵敏，所以常常不是被现实击倒，而是先被自己预支出去的情绪拖住。</p>`,
-rx:["别急自己学会坚强，先承认你确实会被细节和气息刺痛。","给情绪固定一个出口，比如写下来、散步或独处，不要让它在身体里反复回潮。","把精力留给真正会回应你的人，少在试探和猜疑里消耗自己。"],
-books:[{tag:"灵魂回音",title:"《红楼梦》",author:"曹雪芹",desc:"你读它时不会像在读故事，更像在看一种近乎高精度的感受力如何与世界碰撞。"},{tag:"精神镇定",title:"《不安之书》",author:"费尔南多·佩索阿",desc:"适合在你想把那些无法公开说出的细碎研究心安放下来时阅读。"},{tag:"灵魂对话",title:"《浮生六记》",author:"沈复",desc:"它会让你看到，细腻温柔并不只是伤痛，也可以是一种带着温度的生活能力。"}]},
+// 音乐控制
+var musicOn=false;
+function toggleMusic(){var a=document.getElementById('bgm'),b=document.getElementById('musicBtn');if(musicOn){a.pause();b.textContent='🔇';b.className='music-btn';musicOn=false;}else{a.play().catch(function(){});b.textContent='🔊';b.className='music-btn playing';musicOn=true;}}
 
-{name:"苏轼",source:"《定风波》",quote:"\"竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。\"",tags:["旷达通透","幽默智慧","随遇而安"],center:{W:2,P:0,S:4,C:6,A:2,E:2},
-sketch:`<p>你是那种经历过风浪之后，反而笑得更加从容的人。不是因为不痛，而是因为你懂得——人间的风雨，躲不过，不如坦然走过去。</p><p>你身上有一种罕见的通透。你能看到事物的两面，能在困境中找到幽默。</p>`,
-modern:`<p>你很适合处理混乱、危机和残局。别人还在消化情绪时，你已经开始评估损失、重新布局、把事情拉回正轨。</p>`,
-armor:`<p>你的行动力和求生本能很强。越是风暴中心，你越能把注意力从情绪拉回现实，迅速找出下一步。</p>`,
-soft:`<p>你太习惯靠自己扛住一切，久了会忘记有些问题并不是靠更强、更快、更理性就能解决。你容易把柔软理解成脆弱。</p>`,
-rx:["你的强悍已经够用了，先分辨哪些可以继续扛，哪些其实可以放手。","别把情绪一律当作拖累，有些感受需要被承认。","练习在安全的时候放松慢一点，不必每一刻都处在备战状态。"],
-books:[{tag:"灵魂共振",title:"《飘》",author:"玛格丽特·米切尔",desc:"你会在郝思嘉身上认出那种被世界一次次打倒、又一次次把残砖收回来的人。"},{tag:"精神镇定",title:"《老人与海》",author:"海明威",desc:"适合在你需要重新校准坚韧与执拗的边界时读。"},{tag:"灵魂对话",title:"《愤怒的葡萄》",author:"约翰·斯坦贝克",desc:"真正的生存意志不只是一个人的挣扎，也是带着别人一起穿越荒原。"}]},
-
-{name:"陶渊明",source:"《饮酒·其五》",quote:"\"采菊东篱下，悠然见南山。\"",tags:["淡泊宁静","返璞归真","精神自足"],center:{W:-8,P:-6,S:0,C:4,A:2,E:8},
-sketch:`<p>你的内心住着一座山。不是巍峨险峻的那种，而是远远望去轮廓温柔、山间有雾、雾里有炊烟的那种。</p><p>你很早就想明白了一件事：这世上最珍贵的东西，往往不需要去争。</p>`,
-modern:`<p>你在人群中不算显眼，但和你相处过的人都会觉得舒服。你不争不抢，不是因为没有能力，而是你清楚地知道自己真正想要的是什么。</p>`,
-armor:`<p>你拥有极强的内在稳定性。外界的喧嚣很难真正动摇你，因为你的快乐不依赖于别人的评价。</p>`,
-soft:`<p>你有时候会把"不在意"当成保护壳，其实内心深处也渴望被理解、被需要。你害怕深度的情感连接。</p>`,
-rx:["允许自己偶尔"入世"一次，不是每次参与都意味着妥协。","试着对一个人敞开心扉，真正的宁静不是隔绝，而是在喧嚣中依然安定。","你的"不争"是美德，但别让它变成"不敢"。"],
-books:[{tag:"灵魂共振",title:"《瓦尔登湖》",author:"梭罗",desc:"你会在湖畔的小木屋里找到自己的影子。"},{tag:"精神镇定",title:"《一个人的朝圣》",author:"蕾秋·乔伊斯",desc:"关于一个人如何在行走中找到内心的平静。"},{tag:"灵魂对话",title:"《边城》",author:"沈从文",desc:"那种干净、素朴、不被打扰的美，就是你灵魂的底色。"}]},
-
-{name:"辛弃疾",source:"《破阵子》",quote:"\"醉里挑灯看剑，梦回吹角连营。\"",tags:["壮志凌云","铁骨柔情","至死不渝"],center:{W:8,P:6,S:10,C:2,A:2,E:-4},
-sketch:`<p>你心中有一团永远不会熄灭的火。那是对理想的执念，对使命的忠诚，是哪怕所有人都放弃了你也要咬牙坚持的信念。</p>`,
-modern:`<p>你是团队里最不容易放弃的人。当所有人都觉得"算了吧"的时候，你是那个说"再试一次"的人。</p>`,
-armor:`<p>你的意志力是你最强大的武器。你能在逆境中爆发出惊人的能量，越是被逼到绝路，你越是清醒和坚定。</p>`,
-soft:`<p>你太执着于"应该"，以至于忽略了"想要"。你给自己的压力太大，却很少允许自己休息。</p>`,
-rx:["不是每场仗都值得打，学会分辨哪些是真正重要的战场。","给自己放一天假，什么也不做，不带愧疚地。","找一个你不需要逞强的人，在他面前卸下盔甲。"],
-books:[{tag:"灵魂共振",title:"《堂吉诃德》",author:"塞万提斯",desc:"关于一个人如何在全世界的嘲笑中坚守自己的骑士精神。"},{tag:"精神镇定",title:"《活着》",author:"余华",desc:"当你觉得扛不住的时候，看看福贵是怎么活下来的。"},{tag:"灵魂对话",title:"《约翰·克利斯朵夫》",author:"罗曼·罗兰",desc:"一个关于理想主义者如何与世界搏斗又和解的故事。"}]},
-
-{name:"李煜",source:"《虞美人》",quote:"\"问君能有几多愁？恰似一江春水向东流。\"",tags:["至情至性","忧郁深沉","艺术灵魂"],center:{W:2,P:10,S:-6,C:-4,A:-2,E:2},
-sketch:`<p>你是一个把"感受"看得比什么都重要的人。快乐的时候你比谁都快乐，悲伤的时候整个世界都跟着你一起暗下来。</p><p>你常常沉溺于回忆。不是因为现在不好，而是因为你太珍惜那些已经逝去的美好。</p>`,
-modern:`<p>你可能是朋友中最"文艺"的那一个。你对音乐、电影、文字有着超乎常人的感受力。你的朋友圈总是很有审美，但很少有人知道背后藏着多少心事。</p>`,
-armor:`<p>你的共情能力极强，能在别人的故事里看到自己，也能在自己的痛苦中提炼出美。这种把苦难转化为艺术的能力，是你最独特的天赋。</p>`,
-soft:`<p>你太容易被情绪淹没，有时候分不清是真的难过还是在享受难过的感觉。你需要学会在感受和行动之间建立一道缓冲带。</p>`,
-rx:["当情绪的潮水涌来时，试着做一个旁观者，看它来，看它走。","把你的感受写下来、画下来、唱出来——创作是你最好的解药。","少在深夜独自翻看旧照片，那不是怀念，是自我折磨。"],
-books:[{tag:"灵魂共振",title:"《追忆似水年华》",author:"普鲁斯特",desc:"你会在那些绵密的回忆里找到自己的影子。"},{tag:"精神镇定",title:"《当下的力量》",author:"埃克哈特·托利",desc:"教你如何从过去的漩涡中抽身，活在此刻。"},{tag:"灵魂对话",title:"《人间词话》",author:"王国维",desc:"关于美、关于境界、关于如何用文字安放一颗敏感的心。"}]},
-
-{name:"王维",source:"《山居秋暝》",quote:"\"明月松间照，清泉石上流。\"",tags:["空灵澄澈","诗画一体","内心丰盈"],center:{W:-4,P:-2,S:-2,C:2,A:0,E:10},
-sketch:`<p>你的灵魂是透明的。像山间的泉水，像雨后的空气，像月光穿过松林时投下的那片光影——干净、安静、不染纤尘。</p><p>你有一种与生俱来的审美直觉。你能在最平凡的事物中发现美。</p>`,
-modern:`<p>你是那种走进一个房间不会被注意到、但离开后会被想念的人。你的存在感不靠声量，靠的是一种安静的磁场。</p>`,
-armor:`<p>你拥有极强的内在审美系统，不容易被外界的标准绑架。你知道什么是真正的好，什么是喧嚣的假象。</p>`,
-soft:`<p>你有时候太"出世"了，以至于错过了一些需要你"在场"的重要时刻。你的疏离不是冷漠，但在别人眼里可能像冷漠。</p>`,
-rx:["试着主动走进一段关系，而不是等别人来找你。","你的安静是礼物，但偶尔也需要大声说出自己的需要。","在追求精神世界的同时，别忘了照顾好你的身体和日常。"],
-books:[{tag:"灵魂共振",title:"《枕草子》",author:"清少纳言",desc:"那种对微小之美的极致感受力，和你如出一辙。"},{tag:"精神镇定",title:"《禅与摩托车维修艺术》",author:"波西格",desc:"关于如何在日常中修行，在修行中生活。"},{tag:"灵魂对话",title:"《湖上闲思录》",author:"钱穆",desc:"一个学者在湖边的沉思，安静而深远。"}]},
-
-{name:"杜甫",source:"《春望》",quote:"\"感时花溅泪，恨别鸟惊心。\"",tags:["悲悯深沉","责任担当","大爱无疆"],center:{W:8,P:6,S:2,C:2,A:-4,E:-4},
-sketch:`<p>你是那种会为别人的苦难流泪的人。不是矫情，不是表演，而是你的心天生就比别人柔软一些、宽广一些。</p><p>你看新闻会难过，听到不公会愤怒，遇到需要帮助的人会毫不犹豫地伸出手。</p>`,
-modern:`<p>你是朋友圈里最靠谱的那个人。谁有困难第一个想到你，谁需要倾诉第一个找你。你扛着很多不属于自己的重量，却很少抱怨。</p>`,
-armor:`<p>你的责任感是你最大的力量。你能在混乱中保持秩序，在崩塌中成为支柱。</p>`,
-soft:`<p>你太习惯把别人的需求放在自己前面，以至于忘了自己也需要被照顾。你害怕让别人失望。</p>`,
-rx:["学会说"不"。拒绝不是自私，是自我保护。","每周留出一段完全属于自己的时间，不为任何人负责。","记住：你不需要拯救所有人。照顾好自己，才能更好地照顾别人。"],
-books:[{tag:"灵魂共振",title:"《悲惨世界》",author:"雨果",desc:"冉·阿让的救赎之路，就是你灵魂的写照。"},{tag:"精神镇定",title:"《被讨厌的勇气》",author:"岸见一郎",desc:"教你如何在关心他人的同时，不丢失自己的边界。"},{tag:"灵魂对话",title:"《我与地坛》",author:"史铁生",desc:"关于苦难、关于母爱、关于一个人如何在废墟上重建自己。"}]},
-
-{name:"李商隐",source:"《锦瑟》",quote:"\"此情可待成追忆，只是当时已惘然。\"",tags:["朦胧深邃","多情善感","诗意栖居"],center:{W:0,P:6,S:-2,C:-2,A:0,E:6},
-sketch:`<p>你是一个谜，连你自己有时候都读不懂自己。你的心事像一幅被水晕开的画，美得让人心碎，却永远看不真切。</p><p>你习惯把最深的感情藏在最含蓄的表达里。</p>`,
-modern:`<p>你的社交媒体可能充满隐喻——一首歌、一张图、一句没头没尾的话，只有特定的人才能读懂。</p>`,
-armor:`<p>你有一种罕见的审美深度。你能在平凡中看到诗意，在混乱中看到秩序，在遗憾中看到美。</p>`,
-soft:`<p>你太擅长"暗示"而不擅长"直说"，这让你在亲密关系中常常吃亏。</p>`,
-rx:["练习直接表达。"我需要你"这四个字，说出来并不丢人。","不是所有人都能读懂你的暗语，但这不代表他们不在乎你。","试着把日记写得更直白一些，你会发现清晰的表达也有它的美。"],
-books:[{tag:"灵魂共振",title:"《百年孤独》",author:"马尔克斯",desc:"那种宿命般的孤独和轮回，你一定深有共鸣。"},{tag:"精神镇定",title:"《小王子》",author:"圣埃克苏佩里",desc:"简单的故事，却藏着你最需要听到的真相。"},{tag:"灵魂对话",title:"《雪国》",author:"川端康成",desc:"那种朦胧的、说不清道不明的美，就是你的语言。"}]},
-
-{name:"文天祥",source:"《过零丁洋》",quote:"\"人生自古谁无死？留取丹心照汗青。\"",tags:["正气凛然","信念如铁","宁折不弯"],center:{W:8,P:4,S:10,C:4,A:0,E:-6},
-sketch:`<p>你骨子里有一种不可撼动的东西。那是原则，是底线，是哪怕天塌下来也绝不会出卖的信念。</p>`,
-modern:`<p>你是那种在会议上敢说真话的人，是看到不公平会站出来的人，是宁愿得罪领导也不愿违背良心的人。</p>`,
-armor:`<p>你的道德感是你的脊梁。在所有人都弯腰的时候，你依然站着。</p>`,
-soft:`<p>你对"妥协"有一种本能的抗拒，但生活中不是所有事情都是黑白分明的。</p>`,
-rx:["分辨"原则"和"执念"的区别。有些事值得坚持，有些事可以灵活。","照顾好自己的身体和情绪，你不是铁做的。","找到和你价值观相近的人，你不需要一个人战斗。"],
-books:[{tag:"灵魂共振",title:"《1984》",author:"乔治·奥威尔",desc:"关于一个人如何在极权之下保持清醒和良知。"},{tag:"精神镇定",title:"《沉思录》",author:"马可·奥勒留",desc:"一个罗马皇帝的自省笔记。"},{tag:"灵魂对话",title:"《杀死一只知更鸟》",author:"哈珀·李",desc:"关于正义、勇气和一个父亲的温柔力量。"}]},
-
-{name:"纳兰性德",source:"《浣溪沙》",quote:"\"人生若只如初见，何事秋风悲画扇。\"",tags:["深情似海","贵族忧伤","纯粹透明"],center:{W:2,P:10,S:-4,C:-2,A:0,E:2},
-sketch:`<p>你是一个把感情看得比生命还重的人。你爱得纯粹、爱得彻底，不计后果，不留退路。</p><p>你总觉得世间最好的东西都在"最初"——初见的心动、初恋的纯真、初雪的惊喜。</p>`,
-modern:`<p>你可能是朋友中最"深情"的那一个。你记得每一个重要的日子，记得每一句无意间说过的话。</p>`,
-armor:`<p>你的真诚是你最大的魅力。在一个人人都戴着面具的世界里，你的坦诚让人感到安全。</p>`,
-soft:`<p>你太容易把对方理想化，然后在对方"变了"的时候感到幻灭。</p>`,
-rx:["学会爱一个真实的人，而不是你想象中的那个人。","过去的美好之所以美好，是因为它已经过去了。活在当下吧。","允许感情有瑕疵，不完美的爱情也是爱情。"],
-books:[{tag:"灵魂共振",title:"《霍乱时期的爱情》",author:"马尔克斯",desc:"关于一个人如何用一生的时间去爱一个人。"},{tag:"精神镇定",title:"《爱的艺术》",author:"弗洛姆",desc:"教你如何从"坠入爱河"走向"站在爱中"。"},{tag:"灵魂对话",title:"《情人》",author:"杜拉斯",desc:"那种灼热的、不顾一切的爱，你一定懂。"}]},
-
-{name:"庄子",source:"《逍遥游》",quote:"\"北冥有鱼，其名为鲲。鲲之大，不知其几千里也。\"",tags:["逍遥物外","思维奇绝","万物齐一"],center:{W:-8,P:-2,S:2,C:2,A:10,E:6},
-sketch:`<p>你的思维方式和大多数人不一样。当别人在讨论"怎么赢"的时候，你在想"为什么要赢"。</p><p>你天生就有一种跳出框架的能力，能从更高的维度俯瞰人间的纷争，然后淡然一笑。</p>`,
-modern:`<p>你可能是朋友中最"不着调"的那个——但也是最有趣的。你的脑回路清奇，总能在最严肃的话题里找到荒诞的角度。</p>`,
-armor:`<p>你拥有真正的思想自由。你不被任何主义、任何标签、任何身份所绑架。</p>`,
-soft:`<p>你有时候太"超脱"了，以至于让身边的人觉得你不在乎。</p>`,
-rx:["偶尔降落到地面上来，和普通人一起走一段路。","你的智慧需要一个出口——写作、教学、创作，把它分享出去。","记住：蝴蝶虽然自由，但它也需要花。"],
-books:[{tag:"灵魂共振",title:"《禅与摩托车维修艺术》",author:"波西格",desc:"关于理性与感性的终极对话。"},{tag:"精神镇定",title:"《道德经》",author:"老子",desc:"你的精神导师，常读常新。"},{tag:"灵魂对话",title:"《苏菲的世界》",author:"乔斯坦·贾德",desc:"一场关于'我是谁'的哲学冒险。"}]},
-
-{name:"屈原",source:"《离骚》",quote:"\"路漫漫其修远兮，吾将上下而求索。\"",tags:["孤高绝世","理想主义","殉道精神"],center:{W:6,P:8,S:6,C:0,A:2,E:4},
-sketch:`<p>你是一个理想主义者，而且是最纯粹、最不肯妥协的那种。你心中有一个完美的世界，你愿意用一生去接近它。</p>`,
-modern:`<p>你可能在现实中经常感到格格不入。你的标准太高，对自己、对别人、对这个世界。</p>`,
-armor:`<p>你的理想是你的翅膀。在所有人都向下看的时候，你始终在向上飞。</p>`,
-soft:`<p>你太容易因为理想和现实的落差而痛苦。</p>`,
-rx:["完美是方向，不是终点。允许过程中的瑕疵。","找到和你有同样理想的人，孤军奋战太苦了。","偶尔放下标准，享受一下"差不多"的快乐。"],
-books:[{tag:"灵魂共振",title:"《西西弗神话》",author:"加缪",desc:"关于一个人如何在荒诞中找到意义。"},{tag:"精神镇定",title:"《人间失格》",author:"太宰治",desc:"另一个理想主义者的挣扎。"},{tag:"灵魂对话",title:"《理想国》",author:"柏拉图",desc:"你心中的那个完美世界，柏拉图两千年前就在构建了。"}]},
-
-{name:"温庭筠",source:"《菩萨蛮》",quote:"\"小山重叠金明灭，鬓云欲度香腮雪。\"",tags:["绮丽华美","感官敏锐","唯美主义"],center:{W:0,P:4,S:-4,C:-2,A:0,E:2},
-sketch:`<p>你对美有一种近乎偏执的追求。你相信形式和内容同样重要，甚至有时候形式就是内容本身。</p>`,
-modern:`<p>你的生活可能比大多数人更"精致"——不是物质上的奢侈，而是审美上的讲究。</p>`,
-armor:`<p>你的审美品位是你最强大的竞争力。在一个"差不多就行"的世界里，你对品质的坚持让你脱颖而出。</p>`,
-soft:`<p>你有时候会陷入"形式主义"的陷阱，过于在意表面的完美而忽略了本质。</p>`,
-rx:["偶尔允许自己邋遢一次，不完美的生活也有它的魅力。","把你的审美天赋用在创造上，而不仅仅是消费上。","记住：最深的美，往往藏在最朴素的外表下。"],
-books:[{tag:"灵魂共振",title:"《美的历程》",author:"李泽厚",desc:"一部关于中国美学的宏大叙事。"},{tag:"精神镇定",title:"《侘寂》",author:"大西克礼",desc:"关于不完美之美的哲学。"},{tag:"灵魂对话",title:"《源氏物语》",author:"紫式部",desc:"极致的、绮丽的、带着哀愁的美。"}]},
-
-{name:"柳永",source:"《雨霖铃》",quote:"\"多情自古伤离别，更那堪冷落清秋节。\"",tags:["多情缠绵","市井温柔","真性情"],center:{W:4,P:8,S:-4,C:-2,A:0,E:-2},
-sketch:`<p>你是一个活在"关系"里的人。你的快乐和痛苦，几乎都和人有关。</p><p>你不装，不端着，喜欢就是喜欢，难过就是难过。你的情感像一条河，奔涌不息。</p>`,
-modern:`<p>你是朋友圈里最"接地气"的人。你不高冷，不疏离，和谁都能聊得来。</p>`,
-armor:`<p>你的真实是你最大的魅力。在一个人人都在"立人设"的时代，你的坦诚让人如沐春风。</p>`,
-soft:`<p>你太依赖外部的情感供给，一旦失去重要的关系，你就像断了线的风筝。</p>`,
-rx:["培养一个完全属于自己的爱好，不需要别人参与的那种。","学会享受独处，孤独不是惩罚，是和自己对话的机会。","不是每段关系都需要那么浓烈。"],
-books:[{tag:"灵魂共振",title:"《一个陌生女人的来信》",author:"茨威格",desc:"关于一种极致的、不求回报的爱。"},{tag:"精神镇定",title:"《亲密关系》",author:"克里斯多福·孟",desc:"帮你理解为什么你在关系中总是那么用力。"},{tag:"灵魂对话",title:"《平凡的世界》",author:"路遥",desc:"在最普通的生活里，找到最深沉的爱和尊严。"}]},
-
-{name:"陆游",source:"《钗头凤》",quote:"\"山盟虽在，锦书难托。莫、莫、莫！\"",tags:["深情不悔","壮志难酬","矛盾交织"],center:{W:4,P:8,S:4,C:0,A:0,E:0},
-sketch:`<p>你的心里同时住着一个战士和一个诗人。战士想要建功立业，诗人想要执子之手。这两个"你"常常打架。</p>`,
-modern:`<p>你可能是那种事业心很强、但在感情上也很投入的人。你两头都想顾好，结果两头都觉得亏欠。</p>`,
-armor:`<p>你的韧性惊人。被生活打倒一百次，你能站起来一百零一次。</p>`,
-soft:`<p>你太执着于"两全"，但人生很多时候就是一道单选题。</p>`,
-rx:["接受人生的不完美，有些遗憾注定无法弥补。","把精力集中在当下最重要的事上。","偶尔允许自己"自私"一次，为自己而活。"],
-books:[{tag:"灵魂共振",title:"《了不起的盖茨比》",author:"菲茨杰拉德",desc:"关于一个人如何被理想和爱情同时撕裂。"},{tag:"精神镇定",title:"《少有人走的路》",author:"斯科特·派克",desc:"教你如何在爱与责任之间找到平衡。"},{tag:"灵魂对话",title:"《牧羊少年奇幻之旅》",author:"保罗·柯艾略",desc:"关于如何在追寻天命的路上，不迷失自己。"}]},
-
-{name:"王昌龄",source:"《出塞》",quote:"\"但使龙城飞将在，不教胡马度阴山。\"",tags:["家国情怀","铁血柔情","守护者"],center:{W:6,P:4,S:6,C:2,A:0,E:-4},
-sketch:`<p>你是一个有强烈保护欲的人。你的力量不是用来炫耀的，而是用来守护的。</p>`,
-modern:`<p>你是那种默默付出、不求回报的人。你可能不会说漂亮话，但你会在关键时刻挡在前面。</p>`,
-armor:`<p>你的可靠是你最大的财富。在所有人都不确定的时候，你是那个确定的存在。</p>`,
-soft:`<p>你太习惯扮演"强者"的角色，以至于忘了自己也需要被保护。</p>`,
-rx:["允许自己偶尔做一个被照顾的人。","你的肩膀不是铁做的，适时卸下一些重量。","找一个你不需要逞强的角落。"],
-books:[{tag:"灵魂共振",title:"《永别了，武器》",author:"海明威",desc:"关于一个战士如何在战争中保持人性。"},{tag:"精神镇定",title:"《小窗幽记》",author:"陈继儒",desc:"在铁血之外，给自己留一方柔软的天地。"},{tag:"灵魂对话",title:"《杀死一只知更鸟》",author:"哈珀·李",desc:"关于正义、勇气和温柔力量。"}]},
-
-{name:"白居易",source:"《琵琶行》",quote:"\"同是天涯沦落人，相逢何必曾相识。\"",tags:["通俗深情","共情达人","平民诗人"],center:{W:6,P:6,S:0,C:0,A:0,E:-2},
-sketch:`<p>你有一种罕见的能力：能在陌生人身上看到自己。你相信人与人之间的共通性远大于差异性。</p>`,
-modern:`<p>你是那种在出租车上也能和司机聊出人生感悟的人。你没有架子，对每个人都保持着同样的尊重和好奇。</p>`,
-armor:`<p>你的共情力是你最强大的社交工具。你能迅速拉近和任何人的距离。</p>`,
-soft:`<p>你有时候太容易被别人的情绪感染，分不清哪些是自己的感受、哪些是别人的。</p>`,
-rx:["学会区分"共情"和"共苦"。理解对方不等于要承受对方的痛苦。","在帮助别人之前，先确认自己的情绪状态是否稳定。","你的善良需要智慧来保护。"],
-books:[{tag:"灵魂共振",title:"《人间失格》",author:"太宰治",desc:"你会在叶藏身上看到那种对人际关系的极度敏感。"},{tag:"精神镇定",title:"《高敏感是种天赋》",author:"伊尔斯·桑德",desc:"帮你理解自己的高敏感特质。"},{tag:"灵魂对话",title:"《呼兰河传》",author:"萧红",desc:"在最平凡的小城故事里，藏着最深沉的人间温度。"}]},
-
-{name:"岑参",source:"《白雪歌送武判官归京》",quote:"\"忽如一夜春风来，千树万树梨花开。\"",tags:["奇崛瑰丽","冒险精神","乐观豁达"],center:{W:2,P:2,S:4,C:0,A:8,E:0},
-sketch:`<p>你是一个天生的冒险家。你对未知世界充满好奇，越是陌生的环境越能激发你的活力。你能在最恶劣的条件下发现美。</p>`,
-modern:`<p>你可能是朋友中去过最多地方的人，或者至少是最想去远方的人。你不怕吃苦，不怕孤独，只怕一成不变。</p>`,
-armor:`<p>你的适应力极强。把你扔到任何环境里，你都能找到活下去甚至活得精彩的方式。</p>`,
-soft:`<p>你有时候把"不安分"当成了美德，但稳定也有稳定的力量。</p>`,
-rx:["试着在一个地方待满一年，深入了解它。","冒险精神很好，但也要学会评估风险。","给自己建一个"家"的概念。"],
-books:[{tag:"灵魂共振",title:"《在路上》",author:"凯鲁亚克",desc:"你的精神公路片。"},{tag:"精神镇定",title:"《旅行的艺术》",author:"阿兰·德波顿",desc:"教你如何在旅行中获得真正的滋养。"},{tag:"灵魂对话",title:"《夏日走过山间》",author:"约翰·缪尔",desc:"一个自然主义者的山间日记。"}]},
-
-{name:"杜牧",source:"《遣怀》",quote:"\"十年一觉扬州梦，赢得青楼薄幸名。\"",tags:["风流倜傥","清醒沉痛","繁华过后"],center:{W:2,P:4,S:0,C:4,A:2,E:2},
-sketch:`<p>你是一个在繁华中保持清醒的人。你享受热闹，但你知道热闹终会散去。</p>`,
-modern:`<p>你可能是聚会中最活跃的人之一，但散场后独自回家的路上，你会突然觉得空虚。你享受人群，也享受人群散去后的安静。</p>`,
-armor:`<p>你的清醒是你的护身符。你不容易被虚假的繁荣迷惑。</p>`,
-soft:`<p>你的清醒有时候会变成一种诅咒——你太早看到了结局，以至于无法全身心地投入过程。</p>`,
-rx:["允许自己偶尔"犯傻"，不是每一刻都需要清醒。","享受过程，不要总想着结局。","你的深度需要一个出口——写作可能最适合你。"],
-books:[{tag:"灵魂共振",title:"《了不起的盖茨比》",author:"菲茨杰拉德",desc:"关于繁华、幻灭和一盏永远到不了的绿灯。"},{tag:"精神镇定",title:"《局外人》",author:"加缪",desc:"另一个清醒者的故事。"},{tag:"灵魂对话",title:"《浮生六记》",author:"沈复",desc:"在繁华与落魄之间，保持对生活的深情。"}]},
-
-{name:"贺知章",source:"《回乡偶书》",quote:"\"少小离家老大回，乡音无改鬓毛衰。\"",tags:["赤子之心","豁达天真","岁月温柔"],center:{W:4,P:2,S:0,C:2,A:2,E:0},
-sketch:`<p>你是一个在岁月中保持天真的人。你经历了很多，但你没有变得世故。你依然相信善良，依然会为一朵花微笑。</p>`,
-modern:`<p>你是那种让人觉得"相处起来很舒服"的人。你不复杂，不算计，说话做事都带着一种让人放松的真诚。</p>`,
-armor:`<p>你的天真不是无知，而是一种选择。你选择在看清生活的真相之后，依然热爱它。</p>`,
-soft:`<p>你有时候太容易相信别人，以至于被辜负了也不太在意。</p>`,
-rx:["保持天真，但也要学会辨别。","你的温柔是稀缺品，不要浪费在不珍惜的人身上。","偶尔任性一次。"],
-books:[{tag:"灵魂共振",title:"《窗边的小豆豆》",author:"黑柳彻子",desc:"关于如何在成长中保持那颗最初的心。"},{tag:"精神镇定",title:"《小王子》",author:"圣埃克苏佩里",desc:"你的精神知己。"},{tag:"灵魂对话",title:"《城南旧事》",author:"林海音",desc:"用一个孩子的眼睛看世界，干净而深沉。"}]},
-
-{name:"刘禹锡",source:"《酬乐天扬州初逢席上见赠》",quote:"\"沉舟侧畔千帆过，病树前头万木春。\"",tags:["不屈不挠","乐观倔强","诗豪本色"],center:{W:4,P:2,S:6,C:4,A:2,E:0},
-sketch:`<p>你是一个在逆境中依然能看到希望的人。不是盲目乐观，而是你真心相信——冬天来了，春天就不会远。</p>`,
-modern:`<p>你是团队里的"定海神针"。当所有人都慌了的时候，你是那个说"没事，我们换个思路"的人。</p>`,
-armor:`<p>你的韧性和乐观是你最强大的武器。你不是没有被打倒过，但你站起来的速度特别快。</p>`,
-soft:`<p>你有时候太逞强了，明明已经很累了还要笑着说"我没事"。</p>`,
-rx:["允许自己偶尔不坚强。脆弱不是软弱，是真实。","找一个你不需要"表演乐观"的人。","你的乐观是天赋，但也要学会正视痛苦。"],
-books:[{tag:"灵魂共振",title:"《基督山伯爵》",author:"大仲马",desc:"关于一个人如何在绝境中重生。"},{tag:"精神镇定",title:"《活出生命的意义》",author:"弗兰克尔",desc:"人在任何境遇中都能找到意义。"},{tag:"灵魂对话",title:"《苏东坡传》",author:"林语堂",desc:"一个在逆境中活出花样的人。"}]},
-
-{name:"元稹",source:"《离思》",quote:"\"曾经沧海难为水，除却巫山不是云。\"",tags:["专情至极","沧桑深沉","阅尽千帆"],center:{W:2,P:8,S:0,C:2,A:-2,E:2},
-sketch:`<p>你是一个经历过"最好的"之后，就再也看不上"次好的"的人。你的标准被一段刻骨铭心的经历永久改变了。</p>`,
-modern:`<p>你可能给人一种"看透了"的感觉——不是冷漠，而是经历过大风大浪后的平静。</p>`,
-armor:`<p>你的深度是你最大的魅力。你不肤浅，不将就。</p>`,
-soft:`<p>你有时候会把过去的经历当成标尺来衡量现在的一切，这让你很难接受新的可能性。</p>`,
-rx:["允许新的人和事进入你的生活。","把"曾经沧海"当成财富，而不是枷锁。","试着对未来保持一点好奇心。"],
-books:[{tag:"灵魂共振",title:"《斯通纳》",author:"约翰·威廉斯",desc:"一个平凡人的一生，却有着惊人的深度和尊严。"},{tag:"精神镇定",title:"《无声告白》",author:"伍绑达",desc:"关于如何放下过去的期待。"},{tag:"灵魂对话",title:"《长恨歌》",author:"王安忆",desc:"繁华与落寞交织，时间的重量。"}]},
-
-{name:"王勃",source:"《送杜少府之任蜀州》",quote:"\"海内存知己，天涯若比邻。\"",tags:["少年意气","才华横溢","天妒英才"],center:{W:4,P:4,S:4,C:0,A:4,E:0},
-sketch:`<p>你身上有一种少年感。你对世界充满热情，对未来充满期待，你相信友情可以跨越山海。</p>`,
-modern:`<p>你可能是朋友中最有想法的那个人。你的脑子里永远有新的计划。你行动力强，执行力高，唯一的问题是——你太着急了。</p>`,
-armor:`<p>你的才华和热情是你最大的资本。你有一种天然的感召力。</p>`,
-soft:`<p>你太急于证明自己，以至于忽略了积累的重要性。</p>`,
-rx:["慢一点。你有足够的才华，但你需要更多的耐心。","不要总想着"一鸣惊人"，持续的输出比偶尔的惊艳更有价值。","珍惜身边的人。"],
-books:[{tag:"灵魂共振",title:"《麦田里的守望者》",author:"塞林格",desc:"关于一个少年如何在成人世界里保持纯真。"},{tag:"精神镇定",title:"《刻意练习》",author:"艾利克森",desc:"天赋很重要，但持续的练习更重要。"},{tag:"灵魂对话",title:"《人类群星闪耀时》",author:"茨威格",desc:"那些改变历史的瞬间。"}]},
-
-{name:"孟浩然",source:"《春晓》",quote:"\"春眠不觉晓，处处闻啼鸟。\"",tags:["自然天成","恬淡真挚","田园诗心"],center:{W:-4,P:0,S:-2,C:0,A:2,E:6},
-sketch:`<p>你是一个和自然特别亲近的人。你能听懂风的语言，能看懂云的表情。</p><p>你的快乐很简单——一个好天气、一杯好茶、一觉睡到自然醒。</p>`,
-modern:`<p>你可能不太适应快节奏的都市生活。你向往的是一种更慢、更简单的生活方式。</p>`,
-armor:`<p>你拥有一种难得的"钝感力"。你不太在意别人的评价，你活在当下的能力比大多数人都强。</p>`,
-soft:`<p>你有时候太"佛系"了，以至于错过了一些需要主动争取的机会。</p>`,
-rx:["保持你的自然天性，但也要学会在必要时"出击"。","给自己设一个小目标，不用很大，但要有方向感。","你的敏感是对自然的，试着也用在人际关系上。"],
-books:[{tag:"灵魂共振",title:"《一个人的村庄》",author:"刘亮程",desc:"你会在那些关于风、关于土地的文字里找到故乡。"},{tag:"精神镇定",title:"《种树的男人》",author:"让·吉奥诺",desc:"一个人，一片荒地，一生的坚持。"},{tag:"灵魂对话",title:"《从前慢》",author:"木心",desc:"从前的日色变得慢——这就是你向往的节奏。"}]},
-
-{name:"杨万里",source:"《小池》",quote:"\"小荷才露尖尖角，早有蜻蜓立上头。\"",tags:["童心未泯","生活家","小确幸"],center:{W:2,P:0,S:0,C:2,A:0,E:2},
-sketch:`<p>你有一双能发现美的眼睛。不是宏大的美，而是日常生活中细小的、容易被忽略的美。</p>`,
-modern:`<p>你是那种能把平凡的日子过出诗意的人。你的幸福感不依赖于大事件，而是来自无数个微小的美好瞬间。</p>`,
-armor:`<p>你的知足和感恩是你最大的幸福密码。在一个人人都在焦虑"不够"的时代，你已经学会了"够了"的艺术。</p>`,
-soft:`<p>你有时候太容易满足，以至于缺乏进取心。</p>`,
-rx:["保持你对小事的敏感，但也要偶尔仰望星空。","试着挑战一件你觉得"做不到"的事。","你的快乐能力是天赋，把它分享给更多人。"],
-books:[{tag:"灵魂共振",title:"《人间草木》",author:"汪曾祺",desc:"你的精神知己，一个把吃饭喝茶都写成诗的人。"},{tag:"精神镇定",title:"《生活的艺术》",author:"林语堂",desc:"关于如何在烟火气中活出雅致。"},{tag:"灵魂对话",title:"《我与地坛》",author:"史铁生",desc:"在最平凡的地坛里，找到生命的全部意义。"}]},
-
-{name:"李贺",source:"《雁门太守行》",quote:"\"黑云压城城欲摧，甲光向日金鳞开。\"",tags:["鬼才奇想","暗黑美学","燃烧殆尽"],center:{W:0,P:6,S:2,C:-4,A:2,E:4},
-sketch:`<p>你的想象力是你最危险也最迷人的武器。你的脑海里住着一个别人看不到的世界——色彩更浓烈、情感更极端、画面更诡谲。</p>`,
-modern:`<p>你可能是朋友中最"怪"的那一个——但也是最有创造力的。你的审美和大众不太一样。</p>`,
-armor:`<p>你的创造力是你最强大的武器。你能看到别人看不到的角度，想到别人想不到的可能性。</p>`,
-soft:`<p>你的内心消耗很大。你的想象力像一台永不停歇的引擎，有时候会把你自己也烧干。</p>`,
-rx:["给你的创造力找一个固定的出口。","学会在创作和休息之间切换。","找到欣赏你"怪"的人。"],
-books:[{tag:"灵魂共振",title:"《变形记》",author:"卡夫卡",desc:"你会在格里高尔身上看到那种被世界异化的孤独。"},{tag:"精神镇定",title:"《创造力》",author:"契克森米哈赖",desc:"帮你理解和管理你的创造之心。"},{tag:"灵魂对话",title:"《聊斋志异》",author:"蒲松龄",desc:"另一个在现实中找不到出口、于是创造了一个世界的人。"}]},
-
-{name:"秦观",source:"《鹊桥仙》",quote:"\"两情若是久长时，又岂在朝朝暮暮。\"",tags:["温婉深情","理想爱情","诗意浪漫"],center:{W:0,P:6,S:-2,C:2,A:0,E:2},
-sketch:`<p>你相信爱情，而且相信最好的爱情不是占有，而是理解。你不需要时时刻刻在一起，因为你知道真正的连接靠的是心。</p>`,
-modern:`<p>你在感情中是一个很有安全感的人。你有一种底层的信任：真正属于你的，不会走。</p>`,
-armor:`<p>你的情感智慧是你最大的财富。你懂得给爱留白，懂得在亲密中保持独立。</p>`,
-soft:`<p>你有时候太理想化爱情了，以至于在现实中遇到摩擦时会感到失落。</p>`,
-rx:["把你对爱情的理解用在友情和亲情上。","允许爱情有"不诗意"的时刻。","你的浪漫是天赋，但也需要务实来平衡。"],
-books:[{tag:"灵魂共振",title:"《傲慢与偏见》",author:"简·奥斯汀",desc:"关于如何在误解中找到真爱。"},{tag:"精神镇定",title:"《亲密关系》",author:"罗兰·米勒",desc:"用科学的视角理解爱情。"},{tag:"灵魂对话",title:"《一个陌生女人的来信》",author:"茨威格",desc:"关于一种极致的爱。"}]},
-
-{name:"曹操",source:"《观沧海》",quote:"\"日月之行，若出其中；星汉灿烂，若出其里。\"",tags:["霸气纵横","格局宏大","枭雄本色"],center:{W:8,P:4,S:8,C:4,A:4,E:-4},
-sketch:`<p>你的格局比大多数人都大。当别人在纠结眼前的得失时，你已经在谋划十年后的蓝图。</p>`,
-modern:`<p>你可能是那种在公司里升职最快的人，或者至少是最有"老板思维"的人。你做事有章法，看人有眼光，下决定果断。</p>`,
-armor:`<p>你的战略眼光和执行力是你最强大的组合。你不仅能看到目标，还能找到到达目标的路径。</p>`,
-soft:`<p>你太习惯掌控一切，以至于很难信任别人。你也需要学会示弱。</p>`,
-rx:["学会授权。你不需要做所有事。","在追求目标的同时，别忘了享受过程。","偶尔放下"效率"的执念，做一些"无用"的事。"],
-books:[{tag:"灵魂共振",title:"《权力的48条法则》",author:"罗伯特·格林",desc:"你可能已经本能地在实践其中很多条了。"},{tag:"精神镇定",title:"《道德经》",author:"老子",desc:"真正的领导力不是控制，而是引导。"},{tag:"灵魂对话",title:"《三体》",author:"刘慈欣",desc:"宇宙级别的战略博弈，配得上你的格局。"}]},
-
-{name:"晏殊",source:"《浣溪沙》",quote:"\"无可奈何花落去，似曾相识燕归来。\"",tags:["雍容闲雅","淡淡忧伤","贵族气质"],center:{W:2,P:2,S:0,C:4,A:0,E:4},
-sketch:`<p>你是一个在平静中感受深沉的人。你的情感不像火山那样喷发，而像深海那样沉默。</p>`,
-modern:`<p>你给人的第一印象通常是"稳重"和"有教养"。你说话不急不慢，做事有条不紊。但只有最亲近的人才知道，你的内心并不像表面那么平静。</p>`,
-armor:`<p>你的沉稳和优雅是你最大的资本。你不需要大声说话就能让人听到你。</p>`,
-soft:`<p>你太擅长隐藏情绪了，以至于连自己都快忘了那些被压在心底的感受。</p>`,
-rx:["找一个你完全信任的人，在他面前卸下优雅的面具。","写日记。那些你不好意思说出口的话，可以写给自己看。","允许自己偶尔"失态"。"],
-books:[{tag:"灵魂共振",title:"《追忆似水年华》",author:"普鲁斯特",desc:"关于时间、记忆和那些无法挽回的美好。"},{tag:"精神镇定",title:"《当下的力量》",author:"托利",desc:"帮你从对过去的怀念中抽身。"},{tag:"灵魂对话",title:"《浮生六记》",author:"沈复",desc:"一种优雅的、不疾不徐的生活方式。"}]},
-
-{name:"嵇康",source:"《赠秀才入军》",quote:"\"目送归鸿，手挥五弦。俯仰自得，游心太玄。\"",tags:["傲骨天成","不与世同","生命美学"],center:{W:-6,P:2,S:4,C:0,A:6,E:6},
-sketch:`<p>你骨子里有一种不可驯服的傲气。这种傲气不是看不起谁，而是你对"违背自己"这件事有一种本能的抗拒。</p>`,
-modern:`<p>你可能是朋友圈里最"特立独行"的那个。你不跟风，不从众，不为了合群而委屈自己。</p>`,
-armor:`<p>你的真实是你最锋利的武器。你活得通透，活得坦荡，在精神上永远是自由的。</p>`,
-soft:`<p>你的傲气有时候会伤到在乎你的人。不是所有的妥协都是背叛。</p>`,
-rx:["区分"原则"和"脾气"。","试着理解那些"世故"的人。","你的自由不需要通过对抗来证明。"],
-books:[{tag:"灵魂共振",title:"《局外人》",author:"加缪",desc:"默尔索的冷漠不是无情，而是对虚伪的极端抗拒。"},{tag:"精神镇定",title:"《世说新语》",author:"刘义庆",desc:"魏晋名士的言行录，你的精神故乡。"},{tag:"灵魂对话",title:"《月亮与六便士》",author:"毛姆",desc:"一个人如何为了内心的真实，放弃世俗的一切。"}]},
-
-{name:"柳宗元",source:"《江雪》",quote:"\"千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪。\"",tags:["孤绝清冷","内心坚韧","独行者"],center:{W:-2,P:0,S:4,C:4,A:0,E:8},
-sketch:`<p>你是一个在孤独中依然能保持姿态的人。你不怕一个人，甚至有时候觉得一个人更好。</p>`,
-modern:`<p>你可能是那种在开放式办公室里戴着降噪耳机的人。你需要自己的空间。</p>`,
-armor:`<p>你的独立性是你最大的力量。你不依赖任何人的认可来确认自己的价值。</p>`,
-soft:`<p>你有时候把"不需要别人"当成了骄傲，但适度的依赖不是软弱。</p>`,
-rx:["主动邀请一个朋友吃饭。","你的内心世界很丰富，但偶尔也需要外部的刺激。","孤独是你的朋友，但别让它变成你唯一的朋友。"],
-books:[{tag:"灵魂共振",title:"《挪威的森林》",author:"村上春树",desc:"关于孤独、关于失去。"},{tag:"精神镇定",title:"《孤独六讲》",author:"蒋勋",desc:"帮你理解孤独的六种面向。"},{tag:"灵魂对话",title:"《荒野生存》",author:"乔恩·克拉考尔",desc:"一个年轻人走进荒野寻找自由的真实故事。"}]},
-
-{name:"韦应物",source:"《滁州西涧》",quote:"\"春潮带雨晚来急，野渡无人舟自横。\"",tags:["闲适清远","不争不抢","自在随缘"],center:{W:-4,P:-2,S:-2,C:2,A:2,E:8},
-sketch:`<p>你是一个活得特别"松弛"的人。不是刻意追求的松弛，而是一种天然的、骨子里的不紧不慢。</p>`,
-modern:`<p>你可能是朋友中最没有"焦虑感"的那个。当别人在卷的时候，你在公园的长椅上晒太阳。</p>`,
-armor:`<p>你的松弛感是这个焦虑时代最稀缺的品质。你不被外界的节奏裹挟。</p>`,
-soft:`<p>你的"随缘"有时候会变成"随便"。有些机会需要你主动去抓。</p>`,
-rx:["给自己设定一个小目标，要有明确的截止日期。","你的松弛是天赋，但也需要偶尔的紧迫感。","试着主动争取一次。"],
-books:[{tag:"灵魂共振",title:"《人间草木》",author:"汪曾祺",desc:"一个把日子过得又慢又美的人。"},{tag:"精神镇定",title:"《禅与摩托车维修艺术》",author:"波西格",desc:"在日常中找到宁静和品质。"},{tag:"灵魂对话",title:"《一个人的村庄》",author:"刘亮程",desc:"在最慢的时间里，找到最深的生活。"}]},
-
-{name:"龚自珍",source:"《己亥杂诗》",quote:"\"落红不是无情物，化作春泥更护花。\"",tags:["忧国忧民","变革先锋","燃烧奉献"],center:{W:6,P:6,S:4,C:2,A:2,E:-2},
-sketch:`<p>你是一个有强烈使命感的人。你不满足于只过好自己的小日子，你觉得自己有责任让这个世界变得更好。</p>`,
-modern:`<p>你可能是朋友中最关心时事的那个。你的手机里一定有好几个新闻APP。</p>`,
-armor:`<p>你的社会责任感是你最大的驱动力。你不是为自己活着，你是为一个更大的目标活着。</p>`,
-soft:`<p>你太容易把世界的重量扛在自己肩上。</p>`,
-rx:["你改变不了所有事，但你可以改变你能改变的。","定期给自己放假，不看新闻，不想社会问题。","找到同行者。"],
-books:[{tag:"灵魂共振",title:"《乡土中国》",author:"费孝通",desc:"帮你从更深的层面理解你所关心的这片土地。"},{tag:"精神镇定",title:"《被讨厌的勇气》",author:"岸见一郎",desc:"在关心社会的同时，不失去自己的边界。"},{tag:"灵魂对话",title:"《寂静的春天》",author:"蕾切尔·卡森",desc:"一本改变了世界的书。"}]},
-
-{name:"张九龄",source:"《望月怀远》",quote:"\"海上生明月，天涯共此时。\"",tags:["温润如玉","胸怀天下","君子之风"],center:{W:4,P:2,S:2,C:4,A:0,E:2},
-sketch:`<p>你是一个温润而有力量的人。你不锋利，不咄咄逼人，但你的存在本身就让人感到安心和信任。</p>`,
-modern:`<p>你是那种在职场上被称为"靠谱"的人。你做事有分寸，说话有尺度，待人有温度。</p>`,
-armor:`<p>你的稳定性和可靠性是你最大的资本。</p>`,
-soft:`<p>你有时候太"完美"了，没有给自己犯错的空间。</p>`,
-rx:["允许自己偶尔不完美。","你不需要对所有人都好。","偶尔放纵一下，做一件"不像你"的事。"],
-books:[{tag:"灵魂共振",title:"《论语》",author:"孔子",desc:"你的精神底色。"},{tag:"精神镇定",title:"《沉思录》",author:"马可·奥勒留",desc:"在权力和责任中保持内心的平静。"},{tag:"灵魂对话",title:"《杀死一只知更鸟》",author:"哈珀·李",desc:"关于正义、善良和一个好人应该如何活着。"}]},
-
-{name:"姜夔",source:"《扬州慢》",quote:"\"二十四桥仍在，波心荡、冷月无声。\"",tags:["清空骚雅","美学洁癖","冷月诗人"],center:{W:-2,P:2,S:-2,C:2,A:0,E:8},
-sketch:`<p>你对美有一种近乎苛刻的要求。你不能忍受粗糙、庸俗和敷衍。</p>`,
-modern:`<p>你可能是朋友中最"难搞"的那个——但也是品味最好的。你宁缺毋滥。</p>`,
-armor:`<p>你的审美品位是你最独特的竞争力。</p>`,
-soft:`<p>你的高标准有时候会让你陷入孤独。</p>`,
-rx:["试着欣赏"粗糙"的美。","你的冷是保护色，偶尔让别人看到温暖的一面。","找到和你审美频率相近的人。"],
-books:[{tag:"灵魂共振",title:"《雪国》",author:"川端康成",desc:"极致的、冷冽的美。"},{tag:"精神镇定",title:"《侘寂》",author:"大西克礼",desc:"不完美之美的哲学。"},{tag:"灵魂对话",title:"《美的历程》",author:"李泽厚",desc:"中国美学的宏大叙事。"}]},
-
-{name:"黄庭坚",source:"《寄黄几复》",quote:"\"桃李春风一杯酒，江湖夜雨十年灯。\"",tags:["深沉内敛","友情至上","岁月沉淀"],center:{W:2,P:4,S:2,C:4,A:0,E:2},
-sketch:`<p>你是一个把友情看得很重的人。你不轻易交朋友，但一旦认定了，就是一辈子的事。</p>`,
-modern:`<p>你的微信好友可能不多，但每一个都是真正的朋友。你不发朋友圈，但你会在朋友需要的时候第一时间出现。</p>`,
-armor:`<p>你的忠诚和深情是你最珍贵的品质。</p>`,
-soft:`<p>你太不善于表达了。很多重要的话，你都藏在心里没有说出来。</p>`,
-rx:["试着把你的感受说出来。","不要等到失去了才后悔没有表达。","你的深沉是美德，但适度的表达也是一种温柔。"],
-books:[{tag:"灵魂共振",title:"《小团圆》",author:"张爱玲",desc:"关于记忆和那些被时间改变了形状却没有改变重量的感情。"},{tag:"精神镇定",title:"《非暴力沟通》",author:"卢森堡",desc:"帮你学会用更好的方式表达深沉的感受。"},{tag:"灵魂对话",title:"《我们仨》",author:"杨绛",desc:"关于一个家庭、三个人、一辈子的深情。"}]},
-
-{name:"李密",source:"《陈情表》",quote:"\"臣无祖母，无以至今日；祖母无臣，无以终余年。\"",tags:["至孝至诚","情深义重","人间温暖"],center:{W:6,P:6,S:-2,C:0,A:-4,E:-2},
-sketch:`<p>你是一个把家人放在第一位的人。在你心中，没有什么比家人的平安和幸福更重要。</p>`,
-modern:`<p>你是家庭的支柱。你可能为了家庭放弃了很多自己的梦想，但你从不后悔。</p>`,
-armor:`<p>你的责任感和奉献精神是你最大的力量。</p>`,
-soft:`<p>你太习惯付出了，以至于忘了自己也需要被爱。</p>`,
-rx:["你也值得被照顾。学会接受别人的好意。","留出一些时间给自己。","你的爱不需要通过牺牲来证明。"],
-books:[{tag:"灵魂共振",title:"《目送》",author:"龙应台",desc:"关于亲情、关于目送、关于那些无法回头的时光。"},{tag:"精神镇定",title:"《也许你该找个人聊聊》",author:"洛莉·戈特利布",desc:"学会在付出和接受之间找到平衡。"},{tag:"灵魂对话",title:"《活着》",author:"余华",desc:"关于一个人如何在失去一切之后，依然选择活下去。"}]},
-
-{name:"辛弃疾（晚年）",source:"《丑奴儿》",quote:"\"而今识尽愁滋味，欲说还休。欲说还休，却道天凉好个秋。\"",tags:["欲言又止","阅尽沧桑","沉默的力量"],center:{W:2,P:4,S:2,C:6,A:-2,E:4},
-sketch:`<p>你已经过了需要向全世界证明自己的年纪。你有很多话想说，但你选择了沉默。</p>`,
-modern:`<p>你可能是朋友中最"稳"的那个。你很少大喜大悲，但你说的每一句话都有分量。</p>`,
-armor:`<p>你的阅历是你最大的财富。你的冷静不是装出来的，而是被生活打磨出来的。</p>`,
-soft:`<p>你把太多东西藏在了"天凉好个秋"的背后。</p>`,
-rx:["找一个你信任的人，把那些"欲说还休"的话说出来。","写作可能是你最好的出口。","允许自己偶尔"不成熟"一次。"],
-books:[{tag:"灵魂共振",title:"《斯通纳》",author:"约翰·威廉斯",desc:"一个平凡人的一生，沉默而有尊严。"},{tag:"精神镇定",title:"《当我谈跑步时我谈些什么》",author:"村上春树",desc:"在沉默中找到自己的节奏。"},{tag:"灵魂对话",title:"《百年孤独》",author:"马尔克斯",desc:"那些说不出口的孤独。"}]},
-
-{name:"曹植",source:"《白马篇》",quote:"\"捐躯赴国难，视死忽如归。\"",tags:["才高命蹇","悲剧英雄","华彩与落寞"],center:{W:4,P:6,S:4,C:-2,A:2,E:2},
-sketch:`<p>你是一个才华横溢却总觉得怀才不遇的人。你知道自己有多好，但世界似乎总是不给你机会。</p>`,
-modern:`<p>你可能是团队里最有才华的人，但不一定是混得最好的。你不太擅长"经营"关系。</p>`,
-armor:`<p>你的才华是真实的、扎实的、经得起检验的。</p>`,
-soft:`<p>你太在意"被看见"了。你的自我价值不应该建立在外界的认可之上。</p>`,
-rx:["把注意力从"为什么没人看见我"转移到"我还能做什么"。","学一点自我营销的技巧。","找到你的伯乐。"],
-books:[{tag:"灵魂共振",title:"《月亮与六便士》",author:"毛姆",desc:"关于一个天才如何在世俗中挣扎。"},{tag:"精神镇定",title:"《异类》",author:"格拉德威尔",desc:"才华很重要，但时机和坚持同样重要。"},{tag:"灵魂对话",title:"《约翰·克利斯朵夫》",author:"罗曼·罗兰",desc:"天才音乐家的一生。"}]},
-
-{name:"周邦彦",source:"《苏幕遮》",quote:"\"叶上初阳干宿雨，水面清圆，一一风荷举。\"",tags:["精工细作","含蓄蕴藉","匠人精神"],center:{W:0,P:2,S:0,C:4,A:-2,E:4},
-sketch:`<p>你是一个对"品质"有极致追求的人。你做任何事情都追求完美，每一个细节都经得起推敲。</p>`,
-modern:`<p>你可能是团队里最"较真"的那个。别人觉得"差不多了"的时候，你还在调整最后一个细节。</p>`,
-armor:`<p>你的匠人精神是你最大的竞争力。你出手的东西，都有你的签名。</p>`,
-soft:`<p>你有时候会陷入完美主义的陷阱，迟迟无法"交卷"。</p>`,
-rx:["给自己设定截止日期，到了就交。","80分的完成度胜过100分的未完成。","把精力集中在最重要的20%上。"],
-books:[{tag:"灵魂共振",title:"《禅与摩托车维修艺术》",author:"波西格",desc:"关于"品质"这个概念的终极思考。"},{tag:"精神镇定",title:"《完美主义的陷阱》",author:"格林斯潘",desc:"学会与"足够好"和平共处。"},{tag:"灵魂对话",title:"《匠人精神》",author:"秋山利辉",desc:"一个日本木工大师的人生哲学。"}]},
-
-{name:"王安石",source:"《登飞来峰》",quote:"\"不畏浮云遮望眼，自缘身在最高层。\"",tags:["改革锐气","高瞻远瞩","孤勇者"],center:{W:6,P:2,S:6,C:6,A:2,E:2},
-sketch:`<p>你是一个有远见的人。你能看到别人看不到的趋势，想到别人想不到的方案。你不满足于修修补补，你想要从根本上解决问题。</p>`,
-modern:`<p>你可能是团队里最"激进"的那个。你总是在提新方案，而且一旦决定了就会全力推进。</p>`,
-armor:`<p>你的远见和决断力是你最大的优势。你的勇气不是盲目的，而是基于深思熟虑的判断。</p>`,
-soft:`<p>你有时候太"独断"了，以至于忽略了别人的意见。</p>`,
-rx:["在推进改变之前，先花时间让团队理解你的想法。","你的对手不一定是敌人。","学会在坚持和妥协之间找到平衡。"],
-books:[{tag:"灵魂共振",title:"《创新者的窘境》",author:"克里斯坦森",desc:"关于为什么好的想法总是遭到抵制。"},{tag:"精神镇定",title:"《原则》",author:"瑞·达利欧",desc:"一个成功的改革者如何建立自己的决策系统。"},{tag:"灵魂对话",title:"《万历十五年》",author:"黄仁宇",desc:"关于改革、关于制度、关于一个人的理想如何与时代碰撞。"}]},
-
-{name:"蒋捷",source:"《虞美人·听雨》",quote:"\"少年听雨歌楼上，壮年听雨客舟中。而今听雨僧庐下，鬓已星星也。\"",tags:["岁月感悟","人生三境","通透释然"],center:{W:0,P:4,S:0,C:6,A:0,E:6},
-sketch:`<p>你是一个对时间特别敏感的人。你能清晰地感受到自己在不同阶段的变化——年少时的张扬、中年时的漂泊、此刻的平静。</p>`,
-modern:`<p>你可能是朋友中最"通透"的那个。你不焦虑，不攀比，不纠结。你已经过了需要向世界证明自己的阶段。</p>`,
-armor:`<p>你的人生阅历是你最大的财富。你见过太多起起落落，所以你不容易被任何事情吓到。</p>`,
-soft:`<p>你有时候会因为"看透了"而失去热情。你需要提醒自己：看透不等于放弃，通透不等于冷漠。</p>`,
-rx:["在通透的基础上，重新找到一件让你心动的事。","你的经验是宝藏，试着分享给需要的人。","允许自己重新像少年一样热血一次，不丢人。"],
-books:[{tag:"灵魂共振",title:"《百年孤独》",author:"马尔克斯",desc:"关于时间、关于轮回、关于一个家族的兴衰。"},{tag:"精神镇定",title:"《西藏生死书》",author:"索甲仁波切",desc:"关于如何面对生命的每一个阶段。"},{tag:"灵魂对话",title:"《苏东坡传》",author:"林语堂",desc:"一个在每个人生阶段都活出精彩的人。"}]},
-
-{name:"张若虚",source:"《春江花月夜》",quote:"\"江畔何人初见月？江月何年初照人？\"",tags:["宇宙意识","永恒追问","孤篇盖全唐"],center:{W:-2,P:4,S:0,C:2,A:4,E:6},
-sketch:`<p>你是一个会在深夜仰望星空然后问出"我是谁"的人。你对宇宙、对时间、对存在本身有一种本能的好奇。</p>`,
-modern:`<p>你可能是朋友中最"深"的那个。你喜欢聊的话题不是八卦，而是生命的意义、宇宙的起源。</p>`,
-armor:`<p>你的思想深度是你最大的财富。你能在别人只看到表面的地方看到本质。</p>`,
-soft:`<p>你有时候会因为想得太多而行动太少。</p>`,
-rx:["不是所有事情都需要"意义"。有些事情，做了就是做了。","试着把你的思考写下来。","在仰望星空的同时，别忘了脚下的路。"],
-books:[{tag:"灵魂共振",title:"《苏菲的世界》",author:"乔斯坦·贾德",desc:"一场关于哲学的冒险。"},{tag:"精神镇定",title:"《宇宙的琴弦》",author:"布莱恩·格林",desc:"用物理学的方式回答你关于宇宙的追问。"},{tag:"灵魂对话",title:"《人类简史》",author:"尤瓦尔·赫拉利",desc:"关于人类从哪里来、到哪里去。"}]},
-
-{name:"晏几道",source:"《临江仙》",quote:"\"落花人独立，微雨燕双飞。\"",tags:["痴情公子","落魄贵族","纯真不改"],center:{W:-2,P:8,S:-4,C:-2,A:-2,E:4},
-sketch:`<p>你是一个在现实中格格不入的纯真者。你的心太软、太真、太不设防。但你不愿意变硬，因为你知道，一旦变硬了，你就不再是你了。</p>`,
-modern:`<p>你可能是朋友中最"不合时宜"的那个。别人在谈赚钱的时候你在谈感情，别人在谈效率的时候你在谈美。</p>`,
-armor:`<p>你的纯真是这个世界最稀缺的品质。在所有人都变得精明的时候，你的天真反而成了最珍贵的东西。</p>`,
-soft:`<p>你太容易受伤了。你需要学会给自己的心加一层保护壳——不是变得冷漠，而是学会在保持柔软的同时保护自己。</p>`,
-rx:["你的纯真是宝藏，但也需要智慧来守护。","学会辨别谁值得你的真心。","在感到受伤的时候，允许自己暂时退回自己的世界，但不要永远躲在里面。"],
-books:[{tag:"灵魂共振",title:"《小王子》",author:"圣埃克苏佩里",desc:"你就是那个在星球上独自浇花的小王子。"},{tag:"精神镇定",title:"《被嫌弃的松子的一生》",author:"山田宗树",desc:"另一个太善良的灵魂的故事。"},{tag:"灵魂对话",title:"《边城》",author:"沈从文",desc:"翠翠的纯真和等待，和你的灵魂如此相似。"}]},
-
-{name:"范仲淹",source:"《岳阳楼记》",quote:"\"先天下之忧而忧，后天下之乐而乐。\"",tags:["忧乐天下","士大夫精神","知行合一"],center:{W:8,P:4,S:4,C:4,A:0,E:-4},
-sketch:`<p>你是一个有担当的人。你不仅关心自己的小世界，更关心这个大世界。你觉得一个人活着，不能只为了自己。</p>`,
-modern:`<p>你可能是那种在公司里既能做事又能做人的人。你有理想，但你也务实。你知道改变世界要靠一步一步地做。</p>`,
-armor:`<p>你的知行合一是你最大的力量。你不只是想，你还做。</p>`,
-soft:`<p>你给自己的压力太大了。"先天下之忧而忧"也意味着你永远比别人多一份沉重。</p>`,
-rx:["你不需要拯救所有人。做好你能做的，就已经足够了。","定期给自己放假。","找到志同道合的伙伴，分担你肩上的重量。"],
-books:[{tag:"灵魂共振",title:"《乡土中国》",author:"费孝通",desc:"帮你更深刻地理解你所关心的这片土地。"},{tag:"精神镇定",title:"《沉思录》",author:"马可·奥勒留",desc:"一个身兼重任的人如何保持内心的平静。"},{tag:"灵魂对话",title:"《大学》",author:"曾子",desc:"修身齐家治国平天下——你的人生路线图。"}]}
-];
-
-// ============================================================
 // 核心逻辑
-// ============================================================
-let currentQ = 0;
-let scores = {W:0,P:0,S:0,C:0,A:0,E:0};
+var ci=0,sc={W:0,P:0,S:0,C:0,A:0,E:0},picking=false;
 
-function startQuiz() {
-    currentQ = 0;
-    scores = {W:0,P:0,S:0,C:0,A:0,E:0};
-    switchPage('startPage','questionPage');
-    showQ();
+function go(){
+ci=0;sc={W:0,P:0,S:0,C:0,A:0,E:0};picking=false;
+// 尝试播放音乐
+var a=document.getElementById('bgm');
+a.play().then(function(){musicOn=true;var b=document.getElementById('musicBtn');b.textContent='🔊';b.className='music-btn playing';}).catch(function(){});
+sw('pg0','pg1');sq();
 }
 
-function showQ() {
-    const q = questions[currentQ];
-    const total = questions.length;
-    document.getElementById('qNum').textContent = `${currentQ+1} / ${total}`;
-    document.getElementById('qFill').style.width = (currentQ/total*100)+'%';
-    document.getElementById('qScene').textContent = q.scene;
-    document.getElementById('qText').textContent = q.text;
-    const labels = ['壹','贰','叁','肆'];
-    document.getElementById('qOpts').innerHTML = q.options.map((o,i) =>
-        `<div class="q-opt" onclick="pick(${i})"><span class="q-opt-label">${labels[i]}</span><span>${o.text}</span></div>`
-    ).join('');
+function sq(){
+var q=Q[ci],tt=Q.length,lb=['壹','贰','叁','肆'];
+document.getElementById('qN').textContent=(ci+1)+' / '+tt;
+document.getElementById('qF').style.width=(ci/tt*100)+'%';
+document.getElementById('qS').textContent=q.s;
+document.getElementById('qT').textContent=q.t;
+var h='';for(var i=0;i<q.o.length;i++){h+='<div class="q-opt" id="opt'+i+'" onclick="pk('+i+')"><span class="q-lbl">'+lb[i]+'</span><span>'+q.o[i].t+'</span></div>';}
+document.getElementById('qO').innerHTML=h;picking=false;
 }
 
-function pick(i) {
-    const s = questions[currentQ].options[i].scores;
-    for(let k in s) scores[k] += s[k];
-    currentQ++;
-    if(currentQ < questions.length) {
-        showQ();
-        window.scrollTo({top:0,behavior:'smooth'});
-    } else {
-        showResult();
-    }
+function pk(i){
+if(picking)return;picking=true;
+var opts=document.querySelectorAll('.q-opt');
+for(var j=0;j<opts.length;j++){opts[j].className='q-opt dimmed';}
+document.getElementById('opt'+i).className='q-opt selected';
+var v=Q[ci].o[i].v;for(var k in v)sc[k]=(sc[k]||0)+v[k];ci++;
+setTimeout(function(){if(ci<Q.length){sq();window.scrollTo(0,0);}else{sr();}},600);
 }
 
-function calcResult() {
-    let minDist = Infinity, best = results[0];
-    for(const r of results) {
-        let dist = 0;
-        for(let k in scores) {
-            dist += Math.pow((scores[k]||0) - (r.center[k]||0), 2);
-        }
-        if(dist < minDist) { minDist = dist; best = r; }
-    }
-    return best;
+function sr(){
+if(typeof R==='undefined'||!R||R.length===0){alert('数据加载失败，请检查data.js文件是否在同一目录');return;}
+var best=R[0],md=Infinity;
+for(var i=0;i<R.length;i++){var d=0;for(var k in sc)d+=Math.pow((sc[k]||0)-(R[i].c[k]||0),2);if(d<md){md=d;best=R[i];}}
+var dn={W:'入世感',C:'清醒力',P:'燃烧度',S:'抗争度',A:'漫游度',E:'局外感'};
+var dd={W:'你与现实世界的连接程度。',C:'你理性判断与自我审视的能力。',P:'你的情感浓度与释放强度。',S:'你面对逆境时的坚韧与反弹力。',A:'你追寻自由与未知的渴望。',E:'你与世界保持距离的倾向。'};
+var dk=['W','C','P','S','A','E'],dv={};
+for(var i=0;i<dk.length;i++){var k=dk[i],v=sc[k]||0;dv[k]=Math.round(Math.max(0,Math.min(100,(v+16)/32*100)));}
+var idx=R.indexOf(best)+1;var tgs=best.tg||[];var rxs=best.rx||[];var bks=best.bk||[];
+var p=[];
+p.push('<div class="brand" style="border-bottom:none;padding-bottom:10px"><span>LITERA</span><span style="font-size:10px;color:#c8b898">No.'+('0'+idx).slice(-2)+' / '+R.length+'</span></div>');
+p.push('<div class="r-header"><div class="r-label">你的文学灵魂属于</div><div class="r-name">'+(best.n||'')+'</div><div class="r-source">—— '+(best.src||'')+' ——</div><div class="r-quote">'+(best.q||'')+'</div>');
+var tH='';for(var i=0;i<tgs.length;i++)tH+='<span class="r-tag">'+tgs[i]+'</span>';
+p.push('<div class="r-tags">'+tH+'</div></div><div class="divider"></div>');
+p.push('<div class="section"><div class="section-title">✎ 灵魂素描</div><div class="section-body">'+(best.sk||'')+'</div></div>');
+var rH='<div class="section"><div class="section-title">◈ 精神坐标</div><div class="radar-wrap"><div class="radar-chart"><canvas id="rc" width="440" height="440"></canvas></div><div class="radar-dims">';
+for(var i=0;i<dk.length;i++){var k=dk[i];rH+='<div><div class="dim-hd"><span class="dim-nm">'+dn[k]+'</span><span class="dim-vl">'+dv[k]+'%</span></div><div class="dim-bar"><div class="dim-fill" style="width:'+dv[k]+'%"></div></div><div class="dim-desc">'+dd[k]+'</div></div>';}
+rH+='</div></div></div>';p.push(rH);
+p.push('<div class="section"><div class="section-title">☷ 当代侧写</div><div class="section-body">'+(best.md||'')+'</div></div>');
+p.push('<div class="section"><div class="section-title">◇ 灵魂铠甲</div><div class="section-body">'+(best.am||'')+'</div></div>');
+p.push('<div class="section"><div class="section-title">♡ 隐秘软肋</div><div class="section-body">'+(best.sf||'')+'</div></div>');
+var xH='<div class="section"><div class="section-title">☸ 存在处方</div><ol class="rx-list">';for(var i=0;i<rxs.length;i++)xH+='<li><span class="rx-n">'+(i+1)+'.</span><span>'+rxs[i]+'</span></li>';xH+='</ol></div>';p.push(xH);
+var bH='<div class="section"><div class="section-title">▤ 精神食粮</div>';for(var i=0;i<bks.length;i++){var b=bks[i];bH+='<div class="book"><div class="book-tag">'+(b.g||'')+'</div><div class="book-t">《'+(b.t||'')+'》</div><div class="book-a">'+(b.a||'')+'</div><div class="book-d">'+(b.d||'')+'</div></div>';}bH+='</div>';p.push(bH);
+var sH='<div class="share-card" id="sCard"><div class="sc-label">我的文学灵魂属于</div><div class="sc-name">'+(best.n||'')+'</div><div class="sc-src">'+(best.src||'')+'</div><div class="sc-poem">'+(best.q||'')+'</div><div class="sc-tags">'+tH+'</div><div class="sc-dims">';for(var i=0;i<dk.length;i++)sH+='<span class="sc-dim">'+dn[dk[i]]+' '+dv[dk[i]]+'%</span>';sH+='</div><div class="sc-footer">LITERA · 你的灵魂属于哪首古诗词</div></div><div class="ss-tip" id="ssTip">👆 长按上方卡片截图保存，分享给朋友吧！</div>';p.push(sH);
+p.push('<div class="r-acts"><button class="r-btn" onclick="sw(\'pg2\',\'pg0\')">再测一次</button><button class="r-btn pri" onclick="shs()">生成分享卡片</button></div>');
+document.getElementById('rC').innerHTML=p.join('');
+sw('pg1','pg2');
+setTimeout(function(){try{var dlb=[],dvl=[];for(var i=0;i<dk.length;i++){dlb.push(dn[dk[i]]);dvl.push(dv[dk[i]]);}dr(dlb,dvl);}catch(e){}},300);
 }
 
-function normDim(val, key) {
-    const ranges = {W:[-16,16],P:[-16,16],S:[-16,16],C:[-16,16],A:[-16,16],E:[-16,16]};
-    const [min,max] = ranges[key];
-    return Math.round(Math.max(0, Math.min(100, (val - min)/(max - min)*100)));
-}
+function shs(){var c=document.getElementById('sCard'),t=document.getElementById('ssTip');if(c.className.indexOf('show')>=0){c.className='share-card';t.className='ss-tip';}else{c.className='share-card show';t.className='ss-tip show';setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'center'});},100);}}
 
-function showResult() {
-    const r = calcResult();
-    const dimNames = {W:'入世感',C:'清醒力',P:'燃烧度',S:'抗争度',A:'漫游度',E:'局外感'};
-    const dimDescs = {
-        W:'你与现实世界的连接程度，是否关注社会与他人。',
-        C:'你建立秩序、理性判断与自我审视的能力。',
-        P:'你的情感浓度，感受与释放情绪的强度。',
-        S:'你面对逆境时的坚韧程度与反弹力。',
-        A:'你挣脱束缚、追寻自由与未知的渴望。',
-        E:'你与世界保持距离、旁观审视的倾向。'
-    };
-    const dimOrder = ['W','C','P','S','A','E'];
-    const dimVals = {};
-    dimOrder.forEach(k => { dimVals[k] = normDim(scores[k], k); });
-    const radarLabels = dimOrder.map(k => dimNames[k]);
-    const radarValues = dimOrder.map(k => dimVals[k]);
-    const idx = results.indexOf(r) + 1;
-    const total = results.length;
+function dr(lb,vl){var cv=document.getElementById('rc');if(!cv)return;var cx=cv.getContext('2d'),W=cv.width,H=cv.height,mx=W/2,my=H/2,MR=Math.min(W,H)/2-45,n=lb.length,as=Math.PI*2/n,sa=-Math.PI/2;cx.clearRect(0,0,W,H);for(var l=1;l<=4;l++){var r=MR*l/4;cx.beginPath();for(var i=0;i<=n;i++){var a=sa+i*as,x=mx+r*Math.cos(a),y=my+r*Math.sin(a);i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.closePath();cx.strokeStyle='rgba(200,184,152,0.25)';cx.lineWidth=1;cx.stroke();}for(var i=0;i<n;i++){var a=sa+i*as;cx.beginPath();cx.moveTo(mx,my);cx.lineTo(mx+MR*Math.cos(a),my+MR*Math.sin(a));cx.strokeStyle='rgba(200,184,152,0.3)';cx.stroke();}cx.beginPath();for(var i=0;i<=n;i++){var j=i%n,a=sa+j*as,r=MR*vl[j]/100,x=mx+r*Math.cos(a),y=my+r*Math.sin(a);i===0?cx.moveTo(x,y):cx.lineTo(x,y);}cx.closePath();cx.fillStyle='rgba(180,140,90,0.15)';cx.fill();cx.strokeStyle='rgba(160,120,70,0.6)';cx.lineWidth=2;cx.stroke();for(var i=0;i<n;i++){var a=sa+i*as,r=MR*vl[i]/100;cx.beginPath();cx.arc(mx+r*Math.cos(a),my+r*Math.sin(a),4,0,Math.PI*2);cx.fillStyle='#a08060';cx.fill();}cx.font='20px serif';cx.fillStyle='#7a6e5e';cx.textAlign='center';cx.textBaseline='middle';for(var i=0;i<n;i++){var a=sa+i*as,lr=MR+30;cx.fillText(lb[i],mx+lr*Math.cos(a),my+lr*Math.sin(a));}}
 
-    let html = `
-        <div class="brand" style="margin-bottom:0;border-bottom:none;padding-bottom:10px;">
-            <span>LITERA</span>
-            <span class="brand-right">No.${String(idx).padStart(2,'0')} / ${total}</span>
-        </div>
-        <div class="r-header">
-            <div class="r-label">你的文学灵魂属于</div>
-            <div class="r-name">${r.name}</div>
-            <div class="r-source">—— ${r.source} ——</div>
-            <div class="r-quote">${r.quote}</div>
-            <div class="r-tags">${r.tags.map(t=>`<span class="r-tag">${t}</span>`).join('')}</div>
-        </div>
-        <div class="divider"></div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">✎</span> 灵魂素描</div>
-            <div class="section-body">${r.sketch}</div>
-        </div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">◈</span> 精神坐标</div>
-            <div class="radar-wrap">
-                <div class="radar-chart"><canvas id="radarCanvas" width="480" height="480"></canvas></div>
-                <div class="radar-dims">
-                    ${dimOrder.map(k => `
-                        <div class="radar-dim">
-                            <div class="radar-dim-header">
-                                <span class="radar-dim-name">${dimNames[k]}</span>
-                                <span class="radar-dim-val">${dimVals[k]}%</span>
-                            </div>
-                            <div class="radar-dim-bar"><div class="radar-dim-fill" style="width:${dimVals[k]}%"></div></div>
-                            <div class="radar-dim-desc">${dimDescs[k]}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">☷</span> 当代侧写</div>
-            <div class="section-body">${r.modern}</div>
-        </div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">◇</span> 灵魂铠甲</div>
-            <div class="section-body">${r.armor}</div>
-        </div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">♡</span> 隐秘软肋</div>
-            <div class="section-body">${r.soft}</div>
-        </div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">☸</span> 存在处方</div>
-            <ol class="rx-list">
-                ${r.rx.map((item,i) => `<li><span class="rx-num">${i+1}.</span><span>${item}</span></li>`).join('')}
-            </ol>
-        </div>
-        <div class="section">
-            <div class="section-title"><span class="section-icon">▤</span> 精神食粮</div>
-            ${r.books.map(b => `
-                <div class="book-item">
-                    <div class="book-tag">${b.tag}</div>
-                    <div class="book-title">《${b.title.replace(/[《》]/g,'')}》</div>
-                    <div class="book-author">${b.author}</div>
-                    <div class="book-desc">${b.desc}</div>
-                </div>
-            `).join('')}
-        </div>
-        <div class="r-actions">
-            <button class="r-btn" onclick="restartQuiz()">再测一次</button>
-            <button class="r-btn primary" onclick="shareResult()">分享结果</button>
-        </div>
-    `;
-    document.getElementById('resultContent').innerHTML = html;
-    switchPage('questionPage','resultPage');
-    setTimeout(() => drawRadar(radarLabels, radarValues), 100);
-}
-
-function drawRadar(labels, values) {
-    const canvas = document.getElementById('radarCanvas');
-    if(!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const W = canvas.width, H = canvas.height;
-    const cx = W/2, cy = H/2;
-    const R = Math.min(W,H)/2 - 50;
-    const n = labels.length;
-    const angleStep = (Math.PI*2)/n;
-    const startAngle = -Math.PI/2;
-    ctx.clearRect(0,0,W,H);
-
-    // 背景网格
-    for(let level = 1; level <= 4; level++) {
-        const r = R * level/4;
-        ctx.beginPath();
-        for(let i = 0; i <= n; i++) {
-            const angle = startAngle + i * angleStep;
-            const x = cx + r * Math.cos(angle);
-            const y = cy + r * Math.sin(angle);
-            if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = 'rgba(200,184,152,0.25)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
-
-    // 轴线
-    for(let i = 0; i < n; i++) {
-        const angle = startAngle + i * angleStep;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + R * Math.cos(angle), cy + R * Math.sin(angle));
-        ctx.strokeStyle = 'rgba(200,184,152,0.3)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
-
-    // 数据区域
-    ctx.beginPath();
-    for(let i = 0; i <= n; i++) {
-        const idx = i % n;
-        const angle = startAngle + idx * angleStep;
-        const r = R * values[idx]/100;
-        const x = cx + r * Math.cos(angle);
-        const y = cy + r * Math.sin(angle);
-        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-    }
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(180,140,90,0.15)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(160,120,70,0.6)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // 数据点
-    for(let i = 0; i < n; i++) {
-        const angle = startAngle + i * angleStep;
-        const r = R * values[i]/100;
-        const x = cx + r * Math.cos(angle);
-        const y = cy + r * Math.sin(angle);
-        ctx.beginPath();
-        ctx.arc(x, y, 4, 0, Math.PI*2);
-        ctx.fillStyle = '#a08060';
-        ctx.fill();
-    }
-
-    // 标签
-    ctx.font = '22px "Noto Serif SC", serif';
-    ctx.fillStyle = '#7a6e5e';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    for(let i = 0; i < n; i++) {
-        const angle = startAngle + i * angleStep;
-        const lr = R + 32;
-        let x = cx + lr * Math.cos(angle);
-        let y = cy + lr * Math.sin(angle);
-        ctx.fillText(labels[i], x, y);
-    }
-}
-
-function switchPage(fromId, toId) {
-    const from = document.getElementById(fromId);
-    const to = document.getElementById(toId);
-    from.classList.add('fade-out');
-    setTimeout(() => {
-        from.classList.remove('active','fade-out');
-        to.classList.add('active');
-        window.scrollTo({top:0,behavior:'smooth'});
-    }, 350);
-}
-
-function restartQuiz() { switchPage('resultPage','startPage'); }
-
-function shareResult() {
-    const name = document.querySelector('.r-name')?.textContent || '';
-    const source = document.querySelector('.r-source')?.textContent || '';
-    const text = `我的文学灵魂属于「${name}」${source}\n来测测你的灵魂属于哪首古诗词吧！`;
-    if(navigator.share) {
-        navigator.share({title:'你的灵魂属于哪首古诗词',text,url:location.href}).catch(()=>copyText(text));
-    } else { copyText(text); }
-}
-
-function copyText(t) {
-    navigator.clipboard?.writeText(t).then(()=>alert('结果已复制，快分享给朋友吧！')).catch(()=>{
-        const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('结果已复制，快分享给朋友吧！');
-    });
-}
+function sw(a,b){document.getElementById(a).className='page';document.getElementById(b).className='page active';window.scrollTo(0,0);}
 </script>
 </body>
 </html>
